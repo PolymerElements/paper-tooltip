@@ -24,7 +24,7 @@ content.
 <b>Example</b> - positioning the tooltip to the right:
 
     <core-tooltip label="I'm a tooltip to the right" position="right">
-      <polymer-ui-icon-button icon="drawer"></polymer-ui-icon-button>
+      <core-icon-button icon="drawer"></core-icon-button>
     </core-tooltip>
 
 <b>Example</b> - no arrow and showing by default:
@@ -42,6 +42,16 @@ content.
       </div>
     </core-tooltip>
 
+By default, the `tip` attribute specifies the HTML content for a rich tooltip.
+You can customize this attribute with the `tipAttribute` attribute:
+
+    <core-tooltip tipAttribute="htmltooltip">
+      <div>Example of a rich information tooltip</div>
+      <div htmltooltip>
+        ...
+      </div>
+    </core-tooltip>
+
 @group Polymer Core Elements
 @element core-tooltip
 @homepage http://polymer.github.io/core-tooltip
@@ -55,13 +65,13 @@ content.
 <!-- TODO: detect mobile and apply the .large class, instead of manual
            control. -->
 <!-- TODO: possibly reuse core-overlay. -->
-<polymer-element name="core-tooltip" attributes="noarrow position label show" tabindex="0">
+<polymer-element name="core-tooltip" attributes="noarrow position label show tipAttribute" tabindex="0">
 <template>
 
   <link rel="stylesheet" href="core-tooltip.css">
 
-  <div id="tooltip" class="polymer-tooltip {{position}} {{ {noarrow: noarrow, show: show} | tokenList}}" layout horizontal center>
-    <content select="[tip]">{{label}}</content>
+  <div id="tooltip" class="polymer-tooltip {{position}} {{ {noarrow: noarrow, show: show} | tokenList}}">
+    <content select="[{{tipAttribute}}]">{{label}}</content>
   </div>
 
   <content></content>
@@ -73,7 +83,8 @@ content.
 
     /**
      * A simple string label for the tooltip to display. To display a rich
-     * that includes HTML, use the `tip` attribute on the content.
+     * HTML tooltip instead, omit `label` and include the `tip` attribute
+     * on a child node of `core-tooltip`.
      *
      * @attribute label
      * @type string
@@ -81,32 +92,44 @@ content.
      */
     label: null,
 
-    /**
-     * If true, the tooltip an arrow pointing towards the content.
-     *
-     * @attribute noarrow
-     * @type boolean
-     * @default false
-     */
-    noarrow: false,
+    publish: {
+      /**
+       * If true, the tooltip displays by default.
+       *
+       * @attribute show
+       * @type boolean
+       * @default false
+       */
+      show: {value: false, reflect: true},
+
+      /**
+       * Positions the tooltip to the top, right, bottom, left of its content.
+       *
+       * @attribute position
+       * @type string
+       * @default 'bottom'
+       */
+      position: {value: 'bottom', reflect: true},
+
+      /**
+       * If true, the tooltip an arrow pointing towards the content.
+       *
+       * @attribute noarrow
+       * @type boolean
+       * @default false
+       */
+      noarrow: {value: false, reflect: true}
+    },
 
     /**
-     * If true, the tooltip displays by default.
+     * Customizes the attribute used to specify which content
+     * is the rich HTML tooltip.
      *
-     * @attribute show
-     * @type boolean
-     * @default false
-     */
-    show: false,
-
-    /**
-     * Positions the tooltip to the top, right, bottom, left of its content.
-     *
-     * @attribute position
+     * @attribute tipAttribute
      * @type string
-     * @default 'bottom'
+     * @default 'tip'
      */
-    position: 'bottom',
+    tipAttribute: 'tip',
 
     attached: function() {
       this.setPosition();
