@@ -69,9 +69,8 @@ You can customize this attribute with the `tipAttribute` attribute:
 <template>
 
   <link rel="stylesheet" href="core-tooltip.css">
-
-  <div id="tooltip" class="polymer-tooltip {{position}} {{ {noarrow: noarrow, show: show} | tokenList}}">
-    <content select="[{{tipAttribute}}]">{{label}}</content>
+  <div id="tooltip" hidden?="{{!hasTooltipContent}}" class="polymer-tooltip {{position}} {{ {noarrow: noarrow, show: show} | tokenList}}">
+    <content id="c" select="[{{tipAttribute}}]">{{label}}</content>
   </div>
 
   <content></content>
@@ -79,7 +78,7 @@ You can customize this attribute with the `tipAttribute` attribute:
 </template>
 <script>
 
-  Polymer('core-tooltip', {
+  Polymer({
 
     /**
      * A simple string label for the tooltip to display. To display a rich
@@ -91,6 +90,12 @@ You can customize this attribute with the `tipAttribute` attribute:
      * @default null
      */
     label: null,
+
+    computed: {
+      // Indicates whether the tooltip has a set label propety or
+      // an element with the `tip` attribute.
+      hasTooltipContent: 'label || !!tipElement'
+    },
 
     publish: {
       /**
@@ -132,17 +137,32 @@ You can customize this attribute with the `tipAttribute` attribute:
     tipAttribute: 'tip',
 
     attached: function() {
-      this.setPosition();
+      this.updatedChildren();
+    },
+
+    updatedChildren: function () {
+      this.tipElement = null;
+
+      for (var i = 0, el; el = this.$.c.getDistributedNodes()[i]; ++i) {
+        if (el.hasAttribute && el.hasAttribute('tip')) {
+          this.tipElement = el;
+          break;
+        }
+      }
+
+      // Job ensures we're not double calling setPosition() on DOM attach.
+      this.job('positionJob', this.setPosition, 0);
+
+      // Monitor children to re-position tooltip when light dom changes.
+      this.onMutation(this, this.updatedChildren);
     },
 
     labelChanged: function(oldVal, newVal) {
-      // Run if we're not after attached().
-      if (oldVal) {
-        this.setPosition();
-      }
+      this.job('positionJob', this.setPosition, 0);
     },
 
     setPosition: function() {
+
       var controlWidth = this.clientWidth;
       var controlHeight = this.clientHeight;
       var toolTipWidth = this.$.tooltip.clientWidth;
