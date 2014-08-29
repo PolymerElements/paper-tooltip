@@ -145,10 +145,8 @@ You can customize this attribute with the `tipAttribute` attribute:
     setPosition: function() {
       var controlWidth = this.clientWidth;
       var controlHeight = this.clientHeight;
-
-      var styles = getComputedStyle(this.$.tooltip);
-      var toolTipWidth = parseFloat(styles.width);
-      var toolTipHeight = parseFloat(styles.height);
+      var toolTipWidth = this.$.tooltip.clientWidth;
+      var toolTipHeight = this.$.tooltip.clientHeight;
 
       switch (this.position) {
         case 'top':
