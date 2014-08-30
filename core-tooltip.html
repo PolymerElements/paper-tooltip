@@ -151,18 +151,21 @@ You can customize this attribute with the `tipAttribute` attribute:
       }
 
       // Job ensures we're not double calling setPosition() on DOM attach.
-      this.job('positionJob', this.setPosition, 0);
+      this.job('positionJob', this.setPosition);
 
       // Monitor children to re-position tooltip when light dom changes.
       this.onMutation(this, this.updatedChildren);
     },
 
     labelChanged: function(oldVal, newVal) {
-      this.job('positionJob', this.setPosition, 0);
+      this.job('positionJob', this.setPosition);
+    },
+
+    positionChanged: function(oldVal, newVal) {
+      this.job('positionJob', this.setPosition);
     },
 
     setPosition: function() {
-
       var controlWidth = this.clientWidth;
       var controlHeight = this.clientHeight;
       var toolTipWidth = this.$.tooltip.clientWidth;
@@ -172,9 +175,11 @@ You can customize this attribute with the `tipAttribute` attribute:
         case 'top':
         case 'bottom':
           this.$.tooltip.style.left = (controlWidth - toolTipWidth) / 2 + 'px';
+          this.$.tooltip.style.top = null;
           break;
         case 'left':
         case 'right':
+          this.$.tooltip.style.left = null;
           this.$.tooltip.style.top = (controlHeight - toolTipHeight) / 2 + 'px';
           break;
       }
