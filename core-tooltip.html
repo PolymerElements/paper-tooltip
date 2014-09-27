@@ -78,7 +78,7 @@ You can customize this attribute with the `tipAttribute` attribute:
 
   <link rel="stylesheet" href="core-tooltip.css">
   <div id="tooltip" hidden?="{{!hasTooltipContent}}"
-       class="polymer-tooltip {{position}} {{ {noarrow: noarrow, show: show && !disabled} | tokenList}}">
+       class="core-tooltip {{position}} {{ {noarrow: noarrow, show: show && !disabled} | tokenList}}">
     <content id="c" select="[{{tipAttribute}}]">{{label}}</content>
   </div>
 
