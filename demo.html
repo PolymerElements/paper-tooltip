@@ -89,16 +89,12 @@
       -webkit-transform: translate3d(0, 0, 0);
       transform: translate3d(0, 0, 0);
     }
-
-    .on /deep/ .polymer-tooltip {
-      visibility: visible !important;
-    }
   </style>
 
 </head>
 <body unresolved>
 
-  <article onclick="this.classList.toggle('on');">
+  <article onclick="toggleAll()">
 
     <em>click the page to toggle all examples...</em>
 
@@ -156,6 +152,14 @@
 
         </div>
 
+        <div class="example">
+
+          <core-tooltip label="disabled" disabled>
+            Disabled Tooltip
+          </core-tooltip>
+
+        </div>
+
       </section>
 
       <section layout horizontal center-center>
@@ -186,6 +190,13 @@
   </article>
 
 <script>
+  function toggleAll() {
+    var tooltips = document.querySelectorAll('core-tooltip');
+    Array.prototype.forEach.call(tooltips, function(tooltip) {
+      tooltip.show = !tooltip.show;
+    });
+  }
+
   document.querySelector('#fillbutton').addEventListener('click', function(e) {
     e.stopPropagation();
 
