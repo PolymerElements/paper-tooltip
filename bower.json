@@ -1,6 +1,7 @@
 {
   "name": "core-tooltip",
   "private": true,
+  "description": "Tooltip popup for content",
   "dependencies": {
     "polymer": "Polymer/polymer#master",
     "paper-focusable": "Polymer/paper-focusable#master",
