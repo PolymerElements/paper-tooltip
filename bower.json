@@ -4,7 +4,7 @@
   "description": "Tooltip popup for content",
   "dependencies": {
     "polymer": "Polymer/polymer#master",
-    "core-focusable": "Polymercore-focusable#master",
+    "core-focusable": "Polymer/core-focusable#master",
 
     "core-icon-button": "Polymer/core-icon-button#master",
     "paper-fab": "Polymer/paper-fab#master"
