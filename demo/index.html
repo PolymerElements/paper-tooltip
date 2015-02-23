@@ -86,7 +86,8 @@
     }
 
     core-tooltip.fancy:hover::shadow .core-tooltip,
-    core-tooltip.fancy:focus::shadow .core-tooltip {
+    core-tooltip.fancy:focus::shadow .core-tooltip,
+    core-tooltip.fancy[show]::shadow .core-tooltip {
       opacity: 1;
       -webkit-transform: translate3d(0, 0, 0);
       transform: translate3d(0, 0, 0);
@@ -105,19 +106,19 @@
         <div class="example">
 
           <core-tooltip label='position="left"' position="left">
-            <core-icon-button icon="drawer"></core-icon-button>
+            <core-icon-button icon="polymer"></core-icon-button>
           </core-tooltip>
 
           <core-tooltip label='position="top"' position="top">
-            <core-icon-button icon="drawer"></core-icon-button>
+            <core-icon-button icon="polymer"></core-icon-button>
           </core-tooltip>
 
           <core-tooltip label='position="bottom"' position="bottom">
-            <core-icon-button icon="drawer"></core-icon-button>
+            <core-icon-button icon="polymer"></core-icon-button>
           </core-tooltip>
 
           <core-tooltip label='position="right"' position="right">
-            <core-icon-button icon="drawer"></core-icon-button>
+            <core-icon-button icon="polymer"></core-icon-button>
           </core-tooltip>
 
         </div>
