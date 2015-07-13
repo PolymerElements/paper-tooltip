@@ -1,4 +1,4 @@
-core-tooltip
-============
+# paper-tooltip
 
-See the [component page](https://www.polymer-project.org/0.5/docs/elements/core-tooltip.html) for more information.
+`<paper-tooltip>` is a Material Design label that appears when the user hovers
+over an element with the cursor, or focuses the element with the keyboard.
