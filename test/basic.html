@@ -27,47 +27,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="basic">
     <template>
-      <div id="target"></div>
-      <paper-tooltip for="target" id="tooltip">Tooltip text</paper-tooltip>
+      <div>
+        <div id="target"></div>
+        <paper-tooltip for="target">Tooltip text</paper-tooltip>
+      </div>
     </template>
   </test-fixture>
 
   <script>
     suite('basic', function() {
-      test('tooltip is shown when target is focused', function() {
-        var f = fixture('basic');
-        var target = f[0];
-        var tooltip = f[1].querySelector('#tooltip');
+      var f, tooltip, target;
 
-        assert.isTrue(tooltip.hidden);
+      setup(function() {
+        f = fixture('basic');
+        target = f.querySelector('#target');
+        tooltip = f.querySelector('paper-tooltip');
+      });
+
+      test('tooltip is shown when target is focused', function() {
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(actualTooltip.hidden);
 
         MockInteractions.focus(target);
-        assert.isFalse(tooltip.hidden);
+        assert.isFalse(actualTooltip.hidden);
       });
 
       test('tooltip is hidden after target is blurred', function(done) {
-        var f = fixture('basic');
-        var target = f[0];
-        var tooltip = f[1].querySelector('#tooltip');
-
-        assert.isTrue(tooltip.hidden);
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(actualTooltip.hidden);
         MockInteractions.focus(target);
-        assert.isFalse(tooltip.hidden);
+        assert.isFalse(actualTooltip.hidden);
 
-        f[1].addEventListener('neon-animation-finish', function() {
-          assert.isTrue(tooltip.hidden);
+        tooltip.addEventListener('neon-animation-finish', function() {
+          assert.isTrue(actualTooltip.hidden);
           done();
         });
         MockInteractions.blur(target);
+      });
 
+      test('tooltip unlistens to target on detach', function(done) {
+        sinon.spy(tooltip, 'show');
+
+        MockInteractions.focus(target);
+        expect(tooltip.show.callCount).to.be.equal(1);
+
+        MockInteractions.focus(target);
+        expect(tooltip.show.callCount).to.be.equal(2);
+
+        f.removeChild(tooltip);
+
+        setTimeout(function() {
+          // No more listener means no more calling show.
+          MockInteractions.focus(target);
+          expect(tooltip.show.callCount).to.be.equal(2);
+          done();
+        }, 200);
       });
     });
 
     suite('a11y', function() {
       test('has aria role "tooltip"', function() {
         var f = fixture('basic');
-        var target = f[0];
-        var tooltip = f[1];
+        var tooltip = f.querySelector('paper-tooltip');
+
         assert.isTrue(tooltip.getAttribute('role') == 'tooltip');
       });
     });
