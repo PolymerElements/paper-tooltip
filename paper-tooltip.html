@@ -42,6 +42,10 @@ Custom property | Description | Default
 `--paper-tooltip-opacity` | The opacity of the tooltip | `0.9`
 `--paper-tooltip-text-color` | The text color of the tooltip | `white`
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
+
+@group Paper Elements
+@element paper-tooltip
+@demo demo/index.html
 -->
 
 <dom-module id="paper-tooltip">
@@ -153,21 +157,21 @@ Custom property | Description | Default
       },
 
       attached: function() {
-        var target = this.target;
+        this._target = this.target;
 
-        this.listen(target, 'mouseenter', 'show');
-        this.listen(target, 'focus', 'show');
-        this.listen(target, 'mouseleave', 'hide');
-        this.listen(target, 'blur', 'hide');
+        this.listen(this._target, 'mouseenter', 'show');
+        this.listen(this._target, 'focus', 'show');
+        this.listen(this._target, 'mouseleave', 'hide');
+        this.listen(this._target, 'blur', 'hide');
       },
 
       detached: function() {
-        var target = this.target;
-        
-        this.unlisten(target, 'mouseenter', 'show');
-        this.unlisten(target, 'focus', 'show');
-        this.unlisten(target, 'mouseleave', 'hide');
-        this.unlisten(target, 'blur', 'hide');
+        if (this._target) {
+          this.unlisten(this._target, 'mouseenter', 'show');
+          this.unlisten(this._target, 'focus', 'show');
+          this.unlisten(this._target, 'mouseleave', 'hide');
+          this.unlisten(this._target, 'blur', 'hide');
+        }
       },
 
       show: function() {
@@ -184,9 +188,10 @@ Custom property | Description | Default
       },
 
       _setPosition: function() {
-        var target = this.target;
+        if (!this._target)
+          return;
 
-        var targetRect = target.getBoundingClientRect();
+        var targetRect = this._target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
         var centerOffset = (targetRect.width - thisRect.width) / 2;
