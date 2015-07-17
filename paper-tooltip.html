@@ -191,19 +191,14 @@ Custom property | Description | Default
         if (!this._target)
           return;
 
+        var parentRect = this.offsetParent.getBoundingClientRect();
         var targetRect = this._target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
         var centerOffset = (targetRect.width - thisRect.width) / 2;
 
-        // TODO(notwaldorf): This should probably walk up the tree and
-        // add up the scrollTop values, since scrolling could happen in a
-        // container, and not on the main window.
-        var scrollOffset = window.scrollY;
-
-        this.style.left = targetRect.left + centerOffset + 'px';
-        this.style.top = targetRect.top + targetRect.height + scrollOffset +
-            this.marginTop + 'px';
+        this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
+        this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
       },
 
       _onAnimationFinish: function() {
