@@ -41,10 +41,6 @@ Custom property | Description | Default
 `--paper-tooltip-opacity` | The opacity of the tooltip | `0.9`
 `--paper-tooltip-text-color` | The text color of the tooltip | `white`
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
-
-@group Paper Elements
-@element paper-tooltip
-@demo demo/index.html
 -->
 
 <dom-module id="paper-tooltip">
@@ -53,6 +49,7 @@ Custom property | Description | Default
       display: block;
       position: absolute;
       outline: none;
+      z-index: 1002;
     }
 
     #tooltip {
@@ -66,7 +63,6 @@ Custom property | Description | Default
 
       padding: 8px;
       border-radius: 2px;
-      z-index: 1002;
 
       @apply(--paper-tooltip);
     }
@@ -107,6 +103,11 @@ Custom property | Description | Default
           value: 14
         },
 
+        align: {
+          value: 'center',
+          type: String
+        },
+
         animationConfig: {
           type: Object,
           value: function() {
@@ -127,7 +128,7 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        }
+        },
       },
 
       listeners: {
@@ -156,24 +157,26 @@ Custom property | Description | Default
       },
 
       attached: function() {
-        this._target = this.target;
+        var target = this.target;
 
-        this.listen(this._target, 'mouseenter', 'show');
-        this.listen(this._target, 'focus', 'show');
-        this.listen(this._target, 'mouseleave', 'hide');
-        this.listen(this._target, 'blur', 'hide');
+        this.listen(target, 'mouseenter', 'show');
+        this.listen(target, 'focus', 'show');
+        this.listen(target, 'mouseleave', 'hide');
+        this.listen(target, 'blur', 'hide');
       },
 
       detached: function() {
-        if (this._target) {
-          this.unlisten(this._target, 'mouseenter', 'show');
-          this.unlisten(this._target, 'focus', 'show');
-          this.unlisten(this._target, 'mouseleave', 'hide');
-          this.unlisten(this._target, 'blur', 'hide');
-        }
+        var target = this.target;
+        
+        this.unlisten(target, 'mouseenter', 'show');
+        this.unlisten(target, 'focus', 'show');
+        this.unlisten(target, 'mouseleave', 'hide');
+        this.unlisten(target, 'blur', 'hide');
       },
 
       show: function() {
+        if (this._showing) return;
+
         this.$.tooltip.hidden = false;
         this._setPosition();
         this._showing = true;
@@ -182,27 +185,32 @@ Custom property | Description | Default
       },
 
       hide: function() {
+        // prefer focus over mouseleave
+        if (this.target.focused) return;
+
         this._showing = false;
         this.playAnimation('exit');
       },
 
       _setPosition: function() {
-        if (!this._target)
-          return;
+        var target = this.target;
 
-        var targetRect = this._target.getBoundingClientRect();
+        var parentRect = this.offsetParent.getBoundingClientRect();
+        var targetRect = target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
-        var centerOffset = (targetRect.width - thisRect.width) / 2;
+        var centerOffset = (this.align == 'center') ? (targetRect.width - thisRect.width) / 2 : 0;
 
         // TODO(notwaldorf): This should probably walk up the tree and
         // add up the scrollTop values, since scrolling could happen in a
         // container, and not on the main window.
-        var scrollOffset = window.scrollY;
 
-        this.style.left = targetRect.left + centerOffset + 'px';
-        this.style.top = targetRect.top + targetRect.height + scrollOffset +
-            this.marginTop + 'px';
+        if (this.align == 'center' || this.align == 'left') {
+          this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
+        } else {
+          this.style.right = parentRect.right - targetRect.right + 'px';
+        }
+        this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
       },
 
       _onAnimationFinish: function() {
