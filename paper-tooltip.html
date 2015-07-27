@@ -13,7 +13,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 <!--
-Material Design: <a href="http://www.google.com/design/spec/components/tooltips.html>Tooltips</a>
 
 `<paper-tooltip>` is a label that appears on hover and focus when the user
 hovers over an element with the cursor or with the keyboard. It will be centered
@@ -42,6 +41,10 @@ Custom property | Description | Default
 `--paper-tooltip-opacity` | The opacity of the tooltip | `0.9`
 `--paper-tooltip-text-color` | The text color of the tooltip | `white`
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
+
+@group Paper Elements
+@element paper-tooltip
+@demo demo/index.html
 -->
 
 <dom-module id="paper-tooltip">
@@ -129,7 +132,7 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        },
+        }
       },
 
       listeners: {
@@ -158,21 +161,21 @@ Custom property | Description | Default
       },
 
       attached: function() {
-        var target = this.target;
+        this._target = this.target;
 
-        this.listen(target, 'mouseenter', 'show');
-        this.listen(target, 'focus', 'show');
-        this.listen(target, 'mouseleave', 'hide');
-        this.listen(target, 'blur', 'hide');
+        this.listen(this._target, 'mouseenter', 'show');
+        this.listen(this._target, 'focus', 'show');
+        this.listen(this._target, 'mouseleave', 'hide');
+        this.listen(this._target, 'blur', 'hide');
       },
 
       detached: function() {
-        var target = this.target;
-        
-        this.unlisten(target, 'mouseenter', 'show');
-        this.unlisten(target, 'focus', 'show');
-        this.unlisten(target, 'mouseleave', 'hide');
-        this.unlisten(target, 'blur', 'hide');
+        if (this._target) {
+          this.unlisten(this._target, 'mouseenter', 'show');
+          this.unlisten(this._target, 'focus', 'show');
+          this.unlisten(this._target, 'mouseleave', 'hide');
+          this.unlisten(this._target, 'blur', 'hide');
+        }
       },
 
       show: function() {
@@ -186,7 +189,6 @@ Custom property | Description | Default
       },
 
       hide: function() {
-        // prefer focus over mouseleave
         if (this.target.focused) return;
 
         this._showing = false;
@@ -194,17 +196,14 @@ Custom property | Description | Default
       },
 
       _setPosition: function() {
-        var target = this.target;
+        if (!this._target)
+          return;
 
         var parentRect = this.offsetParent.getBoundingClientRect();
-        var targetRect = target.getBoundingClientRect();
+        var targetRect = this._target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
         var centerOffset = (this.align == 'center') ? (targetRect.width - thisRect.width) / 2 : 0;
-
-        // TODO(notwaldorf): This should probably walk up the tree and
-        // add up the scrollTop values, since scrolling could happen in a
-        // container, and not on the main window.
 
         if (this.align == 'center' || this.align == 'left') {
           this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
