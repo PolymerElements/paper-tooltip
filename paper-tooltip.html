@@ -53,9 +53,11 @@ Custom property | Description | Default
       display: block;
       position: absolute;
       outline: none;
+      z-index: 1002;
     }
 
     #tooltip {
+      display: block;
       outline: none;
       @apply(--paper-font-common-base);
       font-size: 10px;
@@ -66,13 +68,17 @@ Custom property | Description | Default
 
       padding: 8px;
       border-radius: 2px;
-      z-index: 1002;
 
       @apply(--paper-tooltip);
     }
+
+    /* Thanks IE 10. */
+    .hidden {
+      display: none !important;
+    }
   </style>
   <template>
-    <div id="tooltip" hidden>
+    <div id="tooltip" class="hidden">
       <content></content>
     </div>
   </template>
@@ -95,7 +101,8 @@ Custom property | Description | Default
          * must be a sibling of the tooltip.
          */
         for: {
-          type: String
+          type: String,
+          observer: '_forChanged'
         },
 
         /**
@@ -140,16 +147,16 @@ Custom property | Description | Default
        * of the tooltip.
        */
       get target () {
-        var ownerRoot = Polymer.dom(this).getOwnerRoot();
         var parentNode = Polymer.dom(this).parentNode;
-        var target;
+        // If the parentNode is a document fragment, then we need to use the host.
+        var ownerRoot = Polymer.dom(this).getOwnerRoot();
 
+        var target;
         if (this.for) {
-          target = parentNode.querySelector('#' + this.for);
-        } else if (parentNode.nodeType == 11) { // DOCUMENT_FRAGMENT_NODE
-          target = ownerRoot.host;
+          target = Polymer.dom(ownerRoot).querySelector('#' + this.for);
         } else {
-          target = parentNode;
+          target = parentNode.nodeType == Node.DOCUMENT_FRAGMENT_NODE ?
+              ownerRoot.host : parentNode;
         }
 
         return target;
@@ -174,7 +181,12 @@ Custom property | Description | Default
       },
 
       show: function() {
-        this.$.tooltip.hidden = false;
+        if (this._showing)
+          return;
+
+        this.cancelAnimation();
+
+        this.toggleClass('hidden', false, this.$.tooltip);
         this._setPosition();
         this._showing = true;
 
@@ -182,8 +194,15 @@ Custom property | Description | Default
       },
 
       hide: function() {
+        if (!this._showing)
+          return;
+
         this._showing = false;
         this.playAnimation('exit');
+      },
+
+      _forChanged: function() {
+        this._target = this.target;
       },
 
       _setPosition: function() {
@@ -202,7 +221,7 @@ Custom property | Description | Default
 
       _onAnimationFinish: function() {
         if (!this._showing) {
-          this.$.tooltip.hidden = true;
+          this.toggleClass('hidden', true, this.$.tooltip);
         }
       },
     })
