@@ -104,9 +104,6 @@ Custom property | Description | Default
       left:45%;
       border-top-color: rgba(97, 97, 97, 0.9);
     }
-
-
-
   </style>
 
   <template>
@@ -241,8 +238,6 @@ Custom property | Description | Default
         var leftSide = targetRect.left - parentRect.left;
         var topSide = targetRect.top - parentRect.top;
 
-        // debugger 
-
         switch (this.position) {
           case 'top':
             this.style.left = leftSide + centerHorizontalOffset + 'px';
@@ -262,7 +257,6 @@ Custom property | Description | Default
             this.style.top = topSide + targetRect.height + this.margin + 'px';  
             break;
         }
-
       },
 
       _onAnimationFinish: function() {
