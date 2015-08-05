@@ -199,6 +199,8 @@ Custom property | Description | Default
         var thisRect = this.getBoundingClientRect();
         var centerHorizontalOffset = (targetRect.width - thisRect.width) / 2;
         var centerVerticalOffset = (targetRect.height - thisRect.height) /2;
+        var leftSide = targetRect.left - parentRect.left;
+        var topSide = targetRect.top - parentRect.top;
 
         // debugger
 
@@ -211,22 +213,22 @@ Custom property | Description | Default
         switch (this.position) {
           case 'top':
             console.log('top');
-            this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
-            this.style.top = targetRect.top - parentRect.top - targetRect.height - this.margin + 'px';  
+            this.style.left = leftSide + centerHorizontalOffset + 'px';
+            this.style.top = topSide - thisRect.height - this.margin + 'px';  
             break;
           case 'bottom':
-            this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
-            this.style.top = targetRect.top - parentRect.top + targetRect.height + 'px';  
+            this.style.left = leftSide + centerHorizontalOffset + 'px';
+            this.style.top = topSide + targetRect.height + this.margin + 'px';  
             console.log('bottom');
             break;
           case 'left':
-            this.style.left = targetRect.left - parentRect.left - targetRect.width - this.margin + 'px';
-            this.style.top = targetRect.top - parentRect.top + centerVerticalOffset + 'px';
+            this.style.left = leftSide - thisRect.width - this.margin + 'px';
+            this.style.top = topSide + centerVerticalOffset + 'px';
             console.log('left');
             break;
           case 'right':
-            this.style.left = targetRect.left - parentRect.left + targetRect.width + this.margin + 'px';
-            this.style.top = targetRect.top - parentRect.top + centerVerticalOffset + 'px';
+            this.style.left = leftSide + targetRect.width + this.margin + 'px';
+            this.style.top = topSide + centerVerticalOffset + 'px';
             console.log('right');
             break;
 
