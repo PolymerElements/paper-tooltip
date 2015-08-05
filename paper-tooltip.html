@@ -197,33 +197,36 @@ Custom property | Description | Default
         var parentRect = this.offsetParent.getBoundingClientRect();
         var targetRect = this._target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
-        var centerOffset = (targetRect.width - thisRect.width) / 2;
+        var centerHorizontalOffset = (targetRect.width - thisRect.width) / 2;
+        var centerVerticalOffset = (targetRect.height - thisRect.height) /2;
 
-        var controlWidth = this.clientWidth;
-        var controlHeight = this.clientHeight;
-        var toolTipWidth = this.$.tooltip.clientWidth;
-        var toolTipHeight = this.$.tooltip.clientHeight; 
-            
+        // debugger
 
         // Test here
-        this.style.left = targetRect.left;
-        this.style.top = targetRect.top;
+        // console.log("other width: " + parentRect.width + " " + targetRect.width + " " + thisRect.width);
+        // console.log("other height: " + parentRect.height + " " + targetRect.height + " " + thisRect.height);
+        // console.log("other top: " + parentRect.top + " " + targetRect.top + " " + thisRect.top);
+        // console.log("other left: " + parentRect.left + " " + targetRect.left + " " + thisRect.left);
 
         switch (this.position) {
-          // TODO
           case 'top':
             console.log('top');
+            this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
+            this.style.top = targetRect.top - parentRect.top - targetRect.height - this.margin + 'px';  
             break;
-          // TODO
           case 'bottom':
+            this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
+            this.style.top = targetRect.top - parentRect.top + targetRect.height + 'px';  
             console.log('bottom');
             break;
-          // TODO
           case 'left':
+            this.style.left = targetRect.left - parentRect.left - targetRect.width - this.margin + 'px';
+            this.style.top = targetRect.top - parentRect.top + centerVerticalOffset + 'px';
             console.log('left');
             break;
-          // TODO
           case 'right':
+            this.style.left = targetRect.left - parentRect.left + targetRect.width + this.margin + 'px';
+            this.style.top = targetRect.top - parentRect.top + centerVerticalOffset + 'px';
             console.log('right');
             break;
 
@@ -244,9 +247,9 @@ Custom property | Description | Default
         var targetRect = this._target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
-        var centerOffset = (targetRect.width - thisRect.width) / 2;
+        var centerHorizontalOffset = (targetRect.width - thisRect.width) / 2;
 
-        this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
+        this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
         this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
       },
       
