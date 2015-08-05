@@ -202,59 +202,27 @@ Custom property | Description | Default
         var leftSide = targetRect.left - parentRect.left;
         var topSide = targetRect.top - parentRect.top;
 
-        // debugger
-
-        // Test here
-        // console.log("other width: " + parentRect.width + " " + targetRect.width + " " + thisRect.width);
-        // console.log("other height: " + parentRect.height + " " + targetRect.height + " " + thisRect.height);
-        // console.log("other top: " + parentRect.top + " " + targetRect.top + " " + thisRect.top);
-        // console.log("other left: " + parentRect.left + " " + targetRect.left + " " + thisRect.left);
-
         switch (this.position) {
           case 'top':
-            console.log('top');
             this.style.left = leftSide + centerHorizontalOffset + 'px';
             this.style.top = topSide - thisRect.height - this.margin + 'px';  
-            break;
-          case 'bottom':
-            this.style.left = leftSide + centerHorizontalOffset + 'px';
-            this.style.top = topSide + targetRect.height + this.margin + 'px';  
-            console.log('bottom');
             break;
           case 'left':
             this.style.left = leftSide - thisRect.width - this.margin + 'px';
             this.style.top = topSide + centerVerticalOffset + 'px';
-            console.log('left');
             break;
           case 'right':
             this.style.left = leftSide + targetRect.width + this.margin + 'px';
             this.style.top = topSide + centerVerticalOffset + 'px';
-            console.log('right');
             break;
-
+          case 'bottom':
           default:
-            // Defaults to old method of positioning if no position specified
-            this._setPosition();
+            this.style.left = leftSide + centerHorizontalOffset + 'px';
+            this.style.top = topSide + targetRect.height + this.margin + 'px';  
             break;
         }
 
       },
-
-      _setPosition: function() {
-        if (!this._target)
-
-          return;
-
-        var parentRect = this.offsetParent.getBoundingClientRect();
-        var targetRect = this._target.getBoundingClientRect();
-        var thisRect = this.getBoundingClientRect();
-
-        var centerHorizontalOffset = (targetRect.width - thisRect.width) / 2;
-
-        this.style.left = targetRect.left - parentRect.left + centerHorizontalOffset + 'px';
-        this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
-      },
-      
 
       _onAnimationFinish: function() {
         if (!this._showing) {
