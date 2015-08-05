@@ -90,6 +90,8 @@ Custom property | Description | Default
       ],
 
       properties: {
+        position: String, 
+
         /**
          * The id of the element that the tooltip is anchored to. This element
          * must be a sibling of the tooltip.
@@ -102,7 +104,7 @@ Custom property | Description | Default
          * The spacing between the top of the tooltip and the element it is
          * anchored to.
          */
-        marginTop: {
+        margin: {
           type: Number,
           value: 14
         },
@@ -175,7 +177,7 @@ Custom property | Description | Default
 
       show: function() {
         this.$.tooltip.hidden = false;
-        this._setPosition();
+        this.setPosition();
         this._showing = true;
 
         this.playAnimation('entry');
@@ -184,6 +186,61 @@ Custom property | Description | Default
       hide: function() {
         this._showing = false;
         this.playAnimation('exit');
+      },
+
+      
+      setPosition: function() {
+        if (!this._target) {
+          return;
+        }
+
+        var parentRect = this.offsetParent.getBoundingClientRect();
+        var targetRect = this._target.getBoundingClientRect();
+        var thisRect = this.getBoundingClientRect();
+        var centerOffset = (targetRect.width - thisRect.width) / 2;
+
+        var controlWidth = this.clientWidth;
+        var controlHeight = this.clientHeight;
+        var toolTipWidth = this.$.tooltip.clientWidth;
+        var toolTipHeight = this.$.tooltip.clientHeight; 
+
+        debugger
+
+        switch (this.position) {
+          // TODO
+          case 'top':
+            this.style.left = null;
+            this.style.top = (controlHeight - toolTipHeight) / 2 + 'px';
+
+            console.log('top');
+            break;
+          case 'bottom':
+            console.log('bottom');
+            this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
+            this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
+            break;
+          // TODO
+          case 'left':
+            console.log('left');
+            this.style.left = null;
+            this.style.top = (controlHeight - toolTipHeight) / 2 + 'px';
+
+            break;
+          // TODO
+          case 'right':
+            this.style.left = (controlWidth - toolTipWidth) / 2 + 'px';
+            this.style.top = null;
+
+
+            console.log('right');
+            break;
+
+          default:
+            // Defaults to old method of positioning if no position specified
+            this._setPosition();
+        }
+
+
       },
 
       _setPosition: function() {
@@ -199,6 +256,7 @@ Custom property | Description | Default
         this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
         this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
       },
+      
 
       _onAnimationFinish: function() {
         if (!this._showing) {
