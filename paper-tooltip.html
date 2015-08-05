@@ -78,7 +78,7 @@ Custom property | Description | Default
       width: 0;
       position: absolute;
       pointer-events: none;
-      border-width: 5px;      
+      border-width: 5px;
     }
 
     :host[position='left'] #arrow {
@@ -126,7 +126,11 @@ Custom property | Description | Default
       ],
 
       properties: {
-        position: String, 
+        /**
+         * The cardinal position of the tooltip relative to its element. Options are 'top', 'left', 'right', 'bottom', and can be blank.
+         * @type {[type]}
+         */
+        position: String,
 
         /**
          * The id of the element that the tooltip is anchored to. This element
@@ -224,7 +228,6 @@ Custom property | Description | Default
         this.playAnimation('exit');
       },
 
-
       setPosition: function() {
         if (!this._target) {
           return;
@@ -241,7 +244,7 @@ Custom property | Description | Default
         switch (this.position) {
           case 'top':
             this.style.left = leftSide + centerHorizontalOffset + 'px';
-            this.style.top = topSide - thisRect.height - this.margin + 'px';  
+            this.style.top = topSide - thisRect.height - this.margin + 'px'; 
             break;
           case 'left':
             this.style.left = leftSide - thisRect.width - this.margin + 'px';
@@ -254,7 +257,7 @@ Custom property | Description | Default
           case 'bottom':
           default:
             this.style.left = leftSide + centerHorizontalOffset + 'px';
-            this.style.top = topSide + targetRect.height + this.margin + 'px';  
+            this.style.top = topSide + targetRect.height + this.margin + 'px';
             break;
         }
       },
