@@ -188,7 +188,7 @@ Custom property | Description | Default
         this.playAnimation('exit');
       },
 
-      
+
       setPosition: function() {
         if (!this._target) {
           return;
@@ -203,48 +203,41 @@ Custom property | Description | Default
         var controlHeight = this.clientHeight;
         var toolTipWidth = this.$.tooltip.clientWidth;
         var toolTipHeight = this.$.tooltip.clientHeight; 
+            
 
-        debugger
+        // Test here
+        this.style.left = targetRect.left;
+        this.style.top = targetRect.top;
 
         switch (this.position) {
           // TODO
           case 'top':
-            this.style.left = null;
-            this.style.top = (controlHeight - toolTipHeight) / 2 + 'px';
-
             console.log('top');
             break;
+          // TODO
           case 'bottom':
             console.log('bottom');
-            this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
-            this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
             break;
           // TODO
           case 'left':
             console.log('left');
-            this.style.left = null;
-            this.style.top = (controlHeight - toolTipHeight) / 2 + 'px';
-
             break;
           // TODO
           case 'right':
-            this.style.left = (controlWidth - toolTipWidth) / 2 + 'px';
-            this.style.top = null;
-
-
             console.log('right');
             break;
 
           default:
             // Defaults to old method of positioning if no position specified
             this._setPosition();
+            break;
         }
-
 
       },
 
       _setPosition: function() {
         if (!this._target)
+
           return;
 
         var parentRect = this.offsetParent.getBoundingClientRect();
