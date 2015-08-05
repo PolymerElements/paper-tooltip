@@ -70,10 +70,49 @@ Custom property | Description | Default
 
       @apply(--paper-tooltip);
     }
+
+    #arrow {
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-width: 5px;      
+    }
+
+    :host[position='left'] #arrow {
+      left: 100%;
+      top:45%;
+      border-left-color: rgba(97, 97, 97, 0.9);
+    }
+
+    :host[position='right'] #arrow {
+      right: 100%;
+      top:45%;
+      border-right-color: rgba(97, 97, 97, 0.9);
+    }
+
+    :host[position='bottom'] #arrow {
+      bottom: 100%;
+      left:45%;
+      border-bottom-color: rgba(97, 97, 97, 0.9);
+    }
+
+    :host[position='top'] #arrow {
+      top: 100%;
+      left:45%;
+      border-top-color: rgba(97, 97, 97, 0.9);
+    }
+
+
+
   </style>
+
   <template>
     <div id="tooltip" hidden>
       <content></content>
+      <div id="arrow"></div>
     </div>
   </template>
   <script>
@@ -201,6 +240,8 @@ Custom property | Description | Default
         var centerVerticalOffset = (targetRect.height - thisRect.height) /2;
         var leftSide = targetRect.left - parentRect.left;
         var topSide = targetRect.top - parentRect.top;
+
+        // debugger 
 
         switch (this.position) {
           case 'top':
