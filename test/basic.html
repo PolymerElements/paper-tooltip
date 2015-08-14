@@ -36,8 +36,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
   paper-tooltip {
     width: 70px;
-    height: 29px;
+    height: 30px;
   }
+
+  .wide {
+    width: 200px;
+  }
+
 </style>
 
 <body>
@@ -47,6 +52,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div>
         <div id="target"></div>
         <paper-tooltip for="target">Tooltip text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="fitted">
+    <template>
+      <div>
+        <div id="target" style="position:absolute"></div>
+        <paper-tooltip for="target" class="wide" fit-to-visible-bounds>Tooltip text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="no-text">
+    <template>
+      <div>
+        <div id="target"></div>
+        <paper-tooltip for="target"></paper-tooltip>
       </div>
     </template>
   </test-fixture>
@@ -74,6 +97,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     suite('basic', function() {
       test('tooltip is shown when target is focused', function() {
+        var f = fixture('no-text');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isTrue(isHidden(actualTooltip));
+      });
+
+      test('tooltip is not shown if empty', function() {
         var f = fixture('basic');
         var target = f.querySelector('#target');
         var tooltip = f.querySelector('paper-tooltip');
@@ -85,7 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.isFalse(isHidden(actualTooltip));
       });
 
-      test('tooltip is positioned correctly', function() {
+      test('tooltip is positioned correctly (bottom)', function() {
         var f = fixture('basic');
         var target = f.querySelector('#target');
         var tooltip = f.querySelector('paper-tooltip');
@@ -102,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         var contentRect = tooltip.getBoundingClientRect();
         expect(contentRect.width).to.be.equal(70);
-        expect(contentRect.height).to.be.equal(29);
+        expect(contentRect.height).to.be.equal(30);
 
         // The target div width is 100, and the tooltip width is 70, and
         // it's centered. The height of the target div is 20, and the
@@ -112,7 +147,121 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Also check the math, just in case.
         expect(contentRect.left).to.be.equal((divRect.width - contentRect.width)/2);
-        expect(contentRect.top).to.be.equal(divRect.height + tooltip.marginTop);
+        expect(contentRect.top).to.be.equal(divRect.height + tooltip.offset);
+      });
+
+      test('tooltip is positioned correctly (top)', function() {
+        var f = fixture('basic');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'top';
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the tooltip is 30, and the
+        // tooltip is 14px above the target.
+        expect(contentRect.left).to.be.equal((100 - 70)/2);
+        expect(contentRect.top).to.be.equal(0 - 30 - 14);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal((divRect.width - contentRect.width)/2);
+        expect(contentRect.top).to.be.equal(0 - contentRect.height - tooltip.offset);
+      });
+
+      test('tooltip is positioned correctly (right)', function() {
+        var f = fixture('basic');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'right';
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip is 14px to the right.
+        // The target div height is 20, the height of the tooltip is 20px, and
+        // the tooltip is centered.
+        expect(contentRect.left).to.be.equal(100 + 14);
+        expect(contentRect.top).to.be.equal((20 - 30)/2);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(divRect.width + tooltip.offset);
+        expect(contentRect.top).to.be.equal((divRect.height - contentRect.height)/2);
+      });
+
+      test('tooltip is positioned correctly (left)', function() {
+        var f = fixture('basic');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'left';
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The tooltip width is 70px, and the tooltip is 14px to the left of the target.
+        // The target div height is 20, the height of the tooltip is 20px, and
+        // the tooltip is centered.
+        expect(contentRect.left).to.be.equal(0 - 70 - 14);
+        expect(contentRect.top).to.be.equal((20 - 30)/2);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(0 - contentRect.width - tooltip.offset);
+        expect(contentRect.top).to.be.equal((divRect.height - contentRect.height)/2);
+      });
+
+      test('tooltip is fitted correctly if out of bounds', function() {
+        var f = fixture('fitted');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        target.style.top = 0;
+        target.style.left = 0;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var contentRect = tooltip.getBoundingClientRect();
+        var divRect = target.getBoundingClientRect();
+
+        // Should be fitted on the left side.
+        expect(contentRect.left).to.be.equal(0);
+        expect(contentRect.top).to.be.equal(divRect.height + tooltip.offset);
       });
 
       test('tooltip is positioned correctly after being dynamically set', function() {
@@ -138,7 +287,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // The tooltip needs to hide before it gets repositioned.
         tooltip.toggleClass('hidden', true, actualTooltip);
-        tooltip._setPosition();
+        tooltip.updatePosition();
         tooltip.toggleClass('hidden', false, actualTooltip);
         assert.isFalse(isHidden(actualTooltip));
 
@@ -221,7 +370,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         var contentRect = tooltip.getBoundingClientRect();
         expect(contentRect.width).to.be.equal(70);
-        expect(contentRect.height).to.be.equal(29);
+        expect(contentRect.height).to.be.equal(30);
 
         // The target div width is 100, and the tooltip width is 70, and
         // it's centered. The height of the target div is 20, and the
@@ -231,7 +380,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Also check the math, just in case.
         expect(contentRect.left).to.be.equal((divRect.width - contentRect.width)/2);
-        expect(contentRect.top).to.be.equal(divRect.height + tooltip.marginTop);
+        expect(contentRect.top).to.be.equal(divRect.height + tooltip.offset);
       });
     });
 
