@@ -222,10 +222,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
         var tooltipBox = actualTooltip.getBoundingClientRect();
         var contentBox = content.getBoundingClientRect();
-        assert.operator(
-            tooltipBox.left + tooltipBox.width / 2,
-            '==',
-            contentBox.left + contentBox.width / 2);
+
+        var tooltipCenter = tooltipBox.left + tooltipBox.width / 2;
+        var contentCenter = contentBox.left + contentBox.width / 2;
+        // We really want to test equality but there appear to be some rounding errors
+        // when using shadow DOM.  Want to be within 1 pixel at least.
+        assert.operator(Math.abs(tooltipCenter - contentCenter), '<', 1);
       });
 
     });
