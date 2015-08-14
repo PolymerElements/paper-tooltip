@@ -215,8 +215,14 @@ Custom property | Description | Default
 
         var centerOffset = (targetRect.width - thisRect.width) / 2;
 
-        this.style.left = targetRect.left - parentRect.left + centerOffset + 'px';
-        this.style.top = targetRect.top - parentRect.top + targetRect.height + this.marginTop + 'px';
+        // The offsetParent may itself be scrollable, so top needs to be relative
+        // to its bounds, rather than the viewport.
+        var scrollLeft = this.offsetParent.scrollLeft;
+        var scrollTop = this.offsetParent.scrollTop;
+
+        this.style.left = targetRect.left - parentRect.left + scrollLeft + centerOffset + 'px';
+        this.style.top =
+          targetRect.top - parentRect.top + scrollTop + targetRect.height + this.marginTop + 'px';
       },
 
       _onAnimationFinish: function() {

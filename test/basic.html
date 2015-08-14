@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../paper-tooltip.html">
   <link rel="import" href="test-button.html">
+  <link rel="import" href="test-scroll.html">
 
 </head>
 <style>
@@ -57,6 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div id="target"></div>
         <paper-tooltip>Tooltip text</paper-tooltip>
       </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scroll">
+    <template>
+      <test-scroll></test-scroll>
     </template>
   </test-fixture>
 
@@ -189,6 +196,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           done();
         }, 200);
       });
+    });
+
+    suite('tooltip is inside a scrollable element', function() {
+      var f, tooltip, content;
+
+      setup(function() {
+        f = fixture('scroll');
+        tooltip = f.$.tooltip;
+        content = f.$.content;
+      });
+
+      test('tooltip is below the content element if scrolled vertically', function() {
+        f.$.container.scrollTop = f.$.container.scrollHeight;
+        MockInteractions.focus(content);
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        var tooltipBox = actualTooltip.getBoundingClientRect();
+        var contentBox = content.getBoundingClientRect();
+        assert.operator(tooltipBox.top, '>',  contentBox.top + contentBox.height);
+      });
+
+      test('tooltip is centered below the content element if scrolled horizontally', function() {
+        f.$.container.scrollLeft = f.$.container.scrollWidth;
+        MockInteractions.focus(content);
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        var tooltipBox = actualTooltip.getBoundingClientRect();
+        var contentBox = content.getBoundingClientRect();
+        assert.operator(
+            tooltipBox.left + tooltipBox.width / 2,
+            '==',
+            contentBox.left + contentBox.width / 2);
+      });
+
     });
 
     suite('tooltip is inside a custom element', function() {
