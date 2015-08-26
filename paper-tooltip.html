@@ -48,40 +48,42 @@ Custom property | Description | Default
 -->
 
 <dom-module id="paper-tooltip">
-  <style>
-    :host {
-      display: block;
-      position: absolute;
-      outline: none;
-      z-index: 1002;
-    }
-
-    #tooltip {
-      display: block;
-      outline: none;
-      @apply(--paper-font-common-base);
-      font-size: 10px;
-
-      background-color: var(--paper-tooltip-background, #616161);
-      opacity: var(--paper-tooltip-opacity, 0.9);
-      color: var(--paper-tooltip-text-color, white);
-
-      padding: 8px;
-      border-radius: 2px;
-
-      @apply(--paper-tooltip);
-    }
-
-    /* Thanks IE 10. */
-    .hidden {
-      display: none !important;
-    }
-  </style>
   <template>
+    <style>
+      :host {
+        display: block;
+        position: absolute;
+        outline: none;
+        z-index: 1002;
+      }
+
+      #tooltip {
+        display: block;
+        outline: none;
+        @apply(--paper-font-common-base);
+        font-size: 10px;
+
+        background-color: var(--paper-tooltip-background, #616161);
+        opacity: var(--paper-tooltip-opacity, 0.9);
+        color: var(--paper-tooltip-text-color, white);
+
+        padding: 8px;
+        border-radius: 2px;
+
+        @apply(--paper-tooltip);
+      }
+
+      /* Thanks IE 10. */
+      .hidden {
+        display: none !important;
+      }
+    </style>
+
     <div id="tooltip" class="hidden">
       <content></content>
     </div>
   </template>
+
   <script>
     Polymer({
       is: 'paper-tooltip',
@@ -224,6 +226,6 @@ Custom property | Description | Default
           this.toggleClass('hidden', true, this.$.tooltip);
         }
       },
-    })
+    });
   </script>
 </dom-module>
