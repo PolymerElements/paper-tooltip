@@ -5,6 +5,8 @@ hovers over an element with the cursor or with the keyboard. It will be centered
 to an anchor element specified in the `for` attribute, or, if that doesn't exist,
 centered to the parent node containing it.
 Example:
+
+```html
     <div style="display:inline-block">
       <button>Click me!</button>
       <paper-tooltip>Tooltip text</paper-tooltip>
@@ -13,6 +15,8 @@ Example:
       <button id="btn">Click me!</button>
       <paper-tooltip for="btn">Tooltip text</paper-tooltip>
     </div>
+```
+
 ### Styling
 The following custom properties and mixins are available for styling:
 
