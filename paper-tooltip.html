@@ -136,7 +136,14 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        }
+        },
+
+        _delaying: {
+          type: Boolean,
+          value: false
+        },
+
+        _timeout:Object
       },
 
       listeners: {
@@ -183,19 +190,29 @@ Custom property | Description | Default
       },
 
       show: function() {
-        if (this._showing)
+        if (this._showing || this._delaying)
           return;
 
         this.cancelAnimation();
 
         this.toggleClass('hidden', false, this.$.tooltip);
         this._setPosition();
-        this._showing = true;
+        this._delaying = true;
+        this._timeout = setTimeout((function(obj) { return function() { obj._delaying = false; obj._showing = true; }; })(this),this.animationConfig['entry'][0].timing.delay);
 
         this.playAnimation('entry');
       },
 
       hide: function() {
+        if (this._delaying)
+        {
+          this.toggleClass('hidden', true, this.$.tooltip);
+          this.cancelAnimation();
+          clearTimeout(this._timeout);
+          this._delaying = false;
+          return;
+        }
+
         if (!this._showing)
           return;
 
