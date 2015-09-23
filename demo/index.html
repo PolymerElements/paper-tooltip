@@ -113,9 +113,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-icon-button id="back" icon="arrow-back" alt="go back"></paper-icon-button>
         <paper-icon-button id="fwd" icon="arrow-forward" alt="go forward"></paper-icon-button>
 
-        <paper-tooltip for="heart" margin-top="0">&lt;3 &lt;3 &lt;3 </paper-tooltip>
-        <paper-tooltip for="back" margin-top="0">halp I am trapped in a tooltip</paper-tooltip>
-        <paper-tooltip for="fwd" margin-top="0">back to the future</paper-tooltip>
+        <!-- paper-icon-buttons have an inherent padding that will push the tooltip down. offset undoes it -->
+        <paper-tooltip for="heart" offset="0">&lt;3 &lt;3 &lt;3 </paper-tooltip>
+        <paper-tooltip for="back" offset="0">halp I am trapped in a tooltip</paper-tooltip>
+        <paper-tooltip for="fwd" offset="0">back to the future</paper-tooltip>
       </div>
     </div>
     <div>
@@ -126,19 +127,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div id="green" class="avatar green" tabindex="0"></div>
         <div id="orange" class="avatar orange" tabindex="0"></div>
 
-        <paper-tooltip for="red" class="custom">
+        <paper-tooltip for="red" class="custom" position="left">
           <img src="http://i.imgur.com/OuUe8Da.jpg">
           Rich-text tooltips are doable but against the Material Design spec.
         </paper-tooltip>
-        <paper-tooltip for="blue" class="custom">
+        <paper-tooltip for="blue" class="custom" position="right">
           <img src="http://i.imgur.com/OuUe8Da.jpg">
           Rich-text tooltips are doable but against the Material Design spec.
         </paper-tooltip>
-        <paper-tooltip for="green" class="custom">
+        <paper-tooltip for="green" class="custom" position="top">
           <img src="http://i.imgur.com/OuUe8Da.jpg">
           Rich-text tooltips are doable but against the Material Design spec.
         </paper-tooltip>
-        <paper-tooltip for="orange" class="custom">
+        <paper-tooltip for="orange" class="custom" position="bottom">
           <img src="http://i.imgur.com/OuUe8Da.jpg">
           Rich-text tooltips are doable but against the Material Design spec.
         </paper-tooltip>
