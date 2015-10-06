@@ -172,7 +172,14 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        }
+        },
+
+        _delaying: {
+          type: Boolean,
+          value: false
+        },
+
+        _timeout:Object
       },
 
       listeners: {
@@ -219,7 +226,7 @@ Custom property | Description | Default
       },
 
       show: function() {
-        if (this._showing)
+        if (this._showing || this._delaying)
           return;
 
         if (Polymer.dom(this).textContent.trim() === '')
@@ -227,17 +234,32 @@ Custom property | Description | Default
 
         this.cancelAnimation();
 
-        this.toggleClass('hidden', false, this.$.tooltip);
-        this.updatePosition();
-        this._showing = true;
+        this._delaying = true;
+        this._timeout = setTimeout((function(obj) { return function()
+          {
+            obj._delaying = false;
+            obj.toggleClass('hidden', false, obj.$.tooltip);
+            obj.updatePosition();
+            obj._showing = true;
+          }; })(this),this.animationConfig['entry'][0].timing.delay);
 
         this.playAnimation('entry');
       },
 
       hide: function() {
+        if (this._delaying)
+        {
+          this.toggleClass('hidden', true, this.$.tooltip);
+          this.cancelAnimation();
+          clearTimeout(this._timeout);
+          this._delaying = false;
+          return;
+        }
+
         if (!this._showing)
           return;
 
+        this.toggleClass('hidden', true, this.$.tooltip);
         this._showing = false;
         this.playAnimation('exit');
       },
