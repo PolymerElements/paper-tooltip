@@ -10,9 +10,7 @@
     "polymer",
     "tooltip"
   ],
-  "main": [
-    "paper-tooltip.html"
-  ],
+  "main": "paper-tooltip.html",
   "private": true,
   "repository": {
     "type": "git",
