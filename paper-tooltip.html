@@ -296,7 +296,7 @@ Custom property | Description | Default
       },
 
       updatePosition: function() {
-        if (!this._target)
+        if (!this._target || !this.offsetParent)
           return;
 
         var offset = this.offset;
