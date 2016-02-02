@@ -420,14 +420,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.isTrue(tooltip.getAttribute('role') == 'tooltip');
       });
 
-      // TODO(noms): The the a11y suite throws an exception because
-      // of https://github.com/GoogleChrome/accessibility-developer-tools/issues/269.
-      // Re-enable them when that's fixed.
-      // a11ySuite('basic');
-      // a11ySuite('fitted');
-      // a11ySuite('no-text');
-      // a11ySuite('dynamic');
-      // a11ySuite('custom');
+      var ignoredRules = ['roleTooltipRequiresDescribedby'];
+
+      a11ySuite('basic', ignoredRules);
+      a11ySuite('fitted', ignoredRules);
+      a11ySuite('no-text', ignoredRules);
+      a11ySuite('dynamic', ignoredRules);
+      a11ySuite('custom', ignoredRules);
     });
   </script>
 </body>
