@@ -295,8 +295,10 @@ Custom property | Description | Default
         var horizontalCenterOffset = (targetRect.width - thisRect.width) / 2;
         var verticalCenterOffset = (targetRect.height - thisRect.height) / 2;
 
-        var targetLeft = targetRect.left - parentRect.left;
-        var targetTop = targetRect.top - parentRect.top;
+        var scrollLeft = this.offsetParent.scrollLeft;
+        var scrollTop = this.offsetParent.scrollTop;
+        var targetLeft = targetRect.left - parentRect.left - window.pageXOffset + scrollLeft;
+        var targetTop = targetRect.top - parentRect.top - window.pageYOffset + scrollTop;
 
         var tooltipLeft, tooltipTop;
 
@@ -321,21 +323,36 @@ Custom property | Description | Default
 
         // TODO(noms): This should use IronFitBehavior if possible.
         if (this.fitToVisibleBounds) {
+
+          // Determine whether to clip to the offsetParent or the viewport
+          var clipX, clipY;
+          var offsetParentStyle = window.getComputedStyle(this.offsetParent);
+          if (offsetParentStyle.overflowX === "visible") {
+            clipX = window.innerWidth;
+          } else {
+            clipX = parentRect.width;
+          }
+          if (offsetParentStyle.overflowY === "visible") {
+            clipY = window.innerHeight;
+          } else {
+            clipY = parentRect.height;
+          }
+
           // Clip the left/right side.
-          if (tooltipLeft + thisRect.width > window.innerWidth) {
+          if (tooltipLeft + thisRect.width - scrollLeft > clipX) {
             this.style.right = '0px';
             this.style.left = 'auto';
           } else {
-            this.style.left = Math.max(0, tooltipLeft) + 'px';
+            this.style.left = Math.max(0, tooltipLeft, scrollLeft) + 'px';
             this.style.right = 'auto';
           }
 
           // Clip the top/bottom side.
-          if (tooltipTop + thisRect.height > window.innerHeight) {
+          if (tooltipTop + thisRect.height - scrollTop > clipY) {
             this.style.bottom = '0px';
             this.style.top = 'auto';
           } else {
-            this.style.top = Math.max(0, tooltipTop) + 'px';
+            this.style.top = Math.max(0, tooltipTop, scrollTop) + 'px';
             this.style.bottom = 'auto';
           }
         } else {

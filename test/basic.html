@@ -43,6 +43,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     width: 200px;
   }
 
+  .scrolling-container {
+    position: relative;
+    overflow: scroll;
+    height: 400px;
+    width: 400px;
+    margin: 100px 150px;
+  }
+
+  .big-block {
+    display: block;
+    height: 600px;
+    width: 910px;
+  }
+
+  .small-block {
+    display: inline-block;
+    height: 300px;
+    width: 300px;
+  }
+
   [hidden] {
     display: none;
   }
@@ -106,6 +126,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div>
         <div id="target"></div>
         <paper-tooltip for="target" manual-mode>Text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scrolled-parent">
+    <template>
+      <div id="scroller" class="scrolling-container">
+        <div class="big-block"></div>
+        <div class="big-block">
+          <div class="small-block"></div>
+          <div class="small-block">
+            <div id="target"></div>
+            <paper-tooltip for="target" animation-delay="0">Tooltip text</paper-tooltip>
+          </div>
+          <div class="small-block"></div>
+        </div>
+        <div class="big-block"></div>
+      </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scrolled-parent-fitted">
+    <template>
+      <div id="scroller" class="scrolling-container">
+        <div class="big-block"></div>
+        <div class="big-block">
+          <div class="small-block"></div>
+          <div class="small-block">
+            <div id="target"></div>
+            <paper-tooltip for="target" animation-delay="0" fit-to-visible-bounds>Tooltip text</paper-tooltip>
+          </div>
+          <div class="small-block"></div>
+        </div>
+        <div class="big-block"></div>
       </div>
     </template>
   </test-fixture>
@@ -434,6 +488,207 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(tooltip._removeListeners.callCount).to.be.equal(1);
         expect(tooltip._addListeners.callCount).to.be.equal(1);
       });
+    });
+
+    suite('scrolled', function () {
+      test('tooltip is positioned correctly (bottom) inside scrolled parent', function () {
+        var f = fixture('scrolled-parent');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        f.scrollTop = 410;
+        f.scrollLeft = 180;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the target div is 20, and the
+        // tooltip is 14px below. The offsets should be calculated relative
+        // to the target.
+        expect(contentRect.left).to.be.equal(divRect.left + (100 - 70) / 2);
+        expect(contentRect.top).to.be.equal(divRect.top + 20 + 14);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(divRect.left + (divRect.width - contentRect.width) / 2);
+        expect(contentRect.top).to.be.equal(divRect.top + divRect.height + tooltip.offset);
+      });
+
+      test('tooltip is positioned correctly (top) inside scrolled parent', function () {
+        var f = fixture('scrolled-parent');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'top';
+        f.scrollTop = 110;
+        f.scrollLeft = 180;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the tooltip is 30, and the
+        // tooltip is 14px above the target.  The offsets should be
+        // calculated relative to the target.
+        expect(contentRect.left).to.be.equal(divRect.left + (100 - 70) / 2);
+        expect(contentRect.top).to.be.equal(divRect.top + 0 - 30 - 14);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(divRect.left + (divRect.width - contentRect.width) / 2);
+        expect(contentRect.top).to.be.equal(divRect.top + 0 - contentRect.height - tooltip.offset);
+      });
+
+      test('tooltip is positioned correctly (right) inside scrolled parent', function () {
+        var f = fixture('scrolled-parent');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'right';
+        f.scrollTop = 110;
+        f.scrollLeft = 180;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip is 14px to the right.
+        // The target div height is 20, the height of the tooltip is 20px, and
+        // the tooltip is centered.  The offsets should be calculated relative
+        // to the target.
+        expect(contentRect.left).to.be.equal(divRect.left + 100 + 14);
+        expect(contentRect.top).to.be.equal(divRect.top + (20 - 30) / 2);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(divRect.left + divRect.width + tooltip.offset);
+        expect(contentRect.top).to.be.equal(divRect.top + (divRect.height - contentRect.height) / 2);
+      });
+
+      test('tooltip is positioned correctly (left) inside scrolled parent', function () {
+        var f = fixture('scrolled-parent');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        tooltip.position = 'left';
+        f.scrollTop = 110;
+        f.scrollLeft = 180;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The tooltip width is 70px, and the tooltip is 14px to the left of the target.
+        // The target div height is 20, the height of the tooltip is 20px, and
+        // the tooltip is centered. The offsets should be calculated relative
+        // to the target.
+        expect(contentRect.left).to.be.equal(divRect.left + 0 - 70 - 14);
+        expect(contentRect.top).to.be.equal(divRect.top + (20 - 30) / 2);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal(divRect.left + 0 - contentRect.width - tooltip.offset);
+        expect(contentRect.top).to.be.equal(divRect.top + (divRect.height - contentRect.height) / 2);
+      });
+
+      test('tooltip is fitted correctly if out of bounds inside scrolled parent', function() {
+        var f = fixture('scrolled-parent-fitted');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        target.style.top = 0;
+        target.style.left = 0;
+        f.fitToVisibleBounds = true;
+        f.scrollTop = 650;
+        f.scrollLeft = 350;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var contentRect = tooltip.getBoundingClientRect();
+        var parentRect = f.getBoundingClientRect();
+
+        // Should at the top left corner of the parent.
+        expect(contentRect.left).to.be.equal(parentRect.left);
+        expect(contentRect.top).to.be.equal(parentRect.top);
+      });
+
+      test('tooltip is positioned correctly after being dynamically set inside scrolled parent', function() {
+        var f = fixture('scrolled-parent');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+        f.scrollTop = 110;
+        f.scrollLeft = 180;
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        // Skip animations in this test, which means we'll show and hide
+        // the tooltip manually, instead of calling focus and blur.
+
+        // The tooltip is shown because it's a sibling of the target,
+        // but it's positioned incorrectly
+        tooltip.toggleClass('hidden', false, actualTooltip);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.left).to.not.be.equal((100 - 70)/2);
+
+        tooltip.for = 'target';
+
+        // The tooltip needs to hide before it gets repositioned.
+        tooltip.toggleClass('hidden', true, actualTooltip);
+        tooltip.updatePosition();
+        tooltip.toggleClass('hidden', false, actualTooltip);
+        assert.isFalse(isHidden(actualTooltip));
+        var divRect = target.getBoundingClientRect();
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the target div is 20, and the
+        // tooltip is 14px below. The offsets should be calculated relative
+        // to the target.
+        contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.left).to.be.equal(divRect.left + (100 - 70)/2);
+        expect(contentRect.top).to.be.equal(divRect.top + 20 + 14);
+      });
+
     });
 
     suite('tooltip is inside a custom element', function() {
