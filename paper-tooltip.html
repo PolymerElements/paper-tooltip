@@ -313,8 +313,10 @@ Custom property | Description | Default
         var horizontalCenterOffset = (targetRect.width - thisRect.width) / 2;
         var verticalCenterOffset = (targetRect.height - thisRect.height) / 2;
 
-        var targetLeft = targetRect.left - parentRect.left;
-        var targetTop = targetRect.top - parentRect.top;
+        var scrollLeft = this.offsetParent.scrollLeft;
+        var scrollTop = this.offsetParent.scrollTop;
+        var targetLeft = targetRect.left - parentRect.left - window.pageXOffset + scrollLeft;
+        var targetTop = targetRect.top - parentRect.top - window.pageYOffset + scrollTop;
 
         var tooltipLeft, tooltipTop;
 
@@ -340,20 +342,20 @@ Custom property | Description | Default
         // TODO(noms): This should use IronFitBehavior if possible.
         if (this.fitToVisibleBounds) {
           // Clip the left/right side.
-          if (tooltipLeft + thisRect.width > window.innerWidth) {
+          if (tooltipLeft + thisRect.width - scrollLeft > parentRect.width) {
             this.style.right = '0px';
             this.style.left = 'auto';
           } else {
-            this.style.left = Math.max(0, tooltipLeft) + 'px';
+            this.style.left = Math.max(scrollLeft, tooltipLeft) + 'px';
             this.style.right = 'auto';
           }
 
           // Clip the top/bottom side.
-          if (tooltipTop + thisRect.height > window.innerHeight) {
+          if (tooltipTop + thisRect.height - scrollTop > parentRect.height) {
             this.style.bottom = '0px';
             this.style.top = 'auto';
           } else {
-            this.style.top = Math.max(0, tooltipTop) + 'px';
+            this.style.top = Math.max(scrollTop, tooltipTop) + 'px';
             this.style.bottom = 'auto';
           }
         } else {
@@ -368,7 +370,7 @@ Custom property | Description | Default
         if (!this._showing) {
           this.toggleClass('hidden', true, this.$.tooltip);
         }
-      },
+      }
     });
   </script>
 </dom-module>
