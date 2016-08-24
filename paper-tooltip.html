@@ -206,7 +206,6 @@ Custom property | Description | Default
 
       listeners: {
         'neon-animation-finish': '_onAnimationFinish',
-        'mouseenter': 'hide'
       },
 
       /**
@@ -241,6 +240,7 @@ Custom property | Description | Default
         this.listen(this._target, 'mouseleave', 'hide');
         this.listen(this._target, 'blur', 'hide');
         this.listen(this._target, 'tap', 'hide');
+        this.listen(this, 'mouseenter', 'hide');
       },
 
       detached: function() {
@@ -250,6 +250,7 @@ Custom property | Description | Default
           this.unlisten(this._target, 'mouseleave', 'hide');
           this.unlisten(this._target, 'blur', 'hide');
           this.unlisten(this._target, 'tap', 'hide');
+          this.unlisten(this, 'mouseenter', 'hide');
         }
       },
 
