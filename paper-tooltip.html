@@ -128,7 +128,8 @@ Custom property | Description | Default
          */
         manualMode: {
           type: Boolean,
-          value: false
+          value: false,
+          observer: '_manualModeChanged'
         },
 
         /**
@@ -201,7 +202,13 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        }
+        },
+
+        /** @type {?EventTarget} */
+        _target: {
+          type: Object,
+          observer: '_targetChanged'
+        },
       },
 
       listeners: {
@@ -231,27 +238,54 @@ Custom property | Description | Default
 
       attached: function() {
         this._target = this.target;
+      },
 
-        if (this.manualMode)
-          return;
+      /**
+       * @param {?EventTarget} newTarget
+       * @param {?EventTarget} oldTarget
+       */
+      _targetChanged: function(newTarget, oldTarget) {
+        if (!this.manualMode) {
+          this._removeListeners(oldTarget);
+          this._addListeners(newTarget);
+        }
+      }
 
-        this.listen(this._target, 'mouseenter', 'show');
-        this.listen(this._target, 'focus', 'show');
-        this.listen(this._target, 'mouseleave', 'hide');
-        this.listen(this._target, 'blur', 'hide');
-        this.listen(this._target, 'tap', 'hide');
+      /** @param {?Element} target */
+      _addListeners: function(target) {
+        if (target) {
+          this.listen(target, 'mouseenter', 'show');
+          this.listen(target, 'focus', 'show');
+          this.listen(target, 'mouseleave', 'hide');
+          this.listen(target, 'blur', 'hide');
+          this.listen(target, 'tap', 'hide');
+        }
         this.listen(this, 'mouseenter', 'hide');
       },
 
       detached: function() {
-        if (this._target && !this.manualMode) {
-          this.unlisten(this._target, 'mouseenter', 'show');
-          this.unlisten(this._target, 'focus', 'show');
-          this.unlisten(this._target, 'mouseleave', 'hide');
-          this.unlisten(this._target, 'blur', 'hide');
-          this.unlisten(this._target, 'tap', 'hide');
-          this.unlisten(this, 'mouseenter', 'hide');
+        if (!this.manualMode)
+          this._removeListeners(this._target);
+      },
+
+      /** @param {?Element} target */
+      _removeListeners: function(target) {
+        if (target) {
+          this.unlisten(target, 'mouseenter', 'show');
+          this.unlisten(target, 'focus', 'show');
+          this.unlisten(target, 'mouseleave', 'hide');
+          this.unlisten(target, 'blur', 'hide');
+          this.unlisten(target, 'tap', 'hide');
         }
+        this.unlisten(this, 'mouseenter', 'hide');
+      },
+
+      /** @param {boolean} manualMode */
+      _manualModeChanged: function(manualMode) {
+        if (manualMode)
+          this._addListeners(this._target);
+        else
+          this._removeListeners(this._target);
       },
 
       show: function() {
