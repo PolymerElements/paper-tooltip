@@ -406,10 +406,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.isTrue(tooltip.manualMode);
 
         sinon.spy(tooltip, '_addListeners');
+        sinon.spy(tooltip, '_removeListeners');
         expect(tooltip._addListeners.callCount).to.be.equal(0);
+        expect(tooltip._removeListeners.callCount).to.be.equal(0);
 
         tooltip.manualMode = false;
         expect(tooltip._addListeners.callCount).to.be.equal(1);
+        expect(tooltip._removeListeners.callCount).to.be.equal(0);
+
+        tooltip.manualMode = true;
+        expect(tooltip._addListeners.callCount).to.be.equal(1);
+        expect(tooltip._removeListeners.callCount).to.be.equal(1);
       });
 
       test('changing for= re-targets event listeners', function() {
