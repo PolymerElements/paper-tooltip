@@ -103,8 +103,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
   <test-fixture id="manual-mode">
     <template>
-      <div id="target"></div>
-      <paper-tooltip for="target" manual-mode></paper-tooltip>
+      <div>
+        <div id="target"></div>
+        <paper-tooltip for="target" manual-mode>Text</paper-tooltip>
+      </div>
     </template>
   </test-fixture>
 
@@ -388,11 +390,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tooltip.fire('mouseenter');
         
         var target = f.querySelector('#target');
-        target.fire('mouseenter');
-        target.fire('focus');
-        target.fire('mouseleave');
-        target.fire('blur');
-        target.fire('tap');
+        target.dispatchEvent(new CustomEvent('mouseenter'));
+        target.dispatchEvent(new CustomEvent('focus'));
+        target.dispatchEvent(new CustomEvent('mouseleave'));
+        target.dispatchEvent(new CustomEvent('blur'));
+        target.dispatchEvent(new CustomEvent('tap'));
         
         expect(tooltip.hide.callCount).to.be.equal(0);
       });
