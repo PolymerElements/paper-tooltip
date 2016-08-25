@@ -240,51 +240,8 @@ Custom property | Description | Default
         this._target = this.target;
       },
 
-      /**
-       * @param {?EventTarget} newTarget
-       * @param {?EventTarget} oldTarget
-       */
-      _targetChanged: function(newTarget, oldTarget) {
-        if (!this.manualMode) {
-          this._removeListeners(oldTarget);
-          this._addListeners(newTarget);
-        }
-      }
-
-      /** @param {?Element} target */
-      _addListeners: function(target) {
-        if (target) {
-          this.listen(target, 'mouseenter', 'show');
-          this.listen(target, 'focus', 'show');
-          this.listen(target, 'mouseleave', 'hide');
-          this.listen(target, 'blur', 'hide');
-          this.listen(target, 'tap', 'hide');
-        }
-        this.listen(this, 'mouseenter', 'hide');
-      },
-
       detached: function() {
         if (!this.manualMode)
-          this._removeListeners(this._target);
-      },
-
-      /** @param {?Element} target */
-      _removeListeners: function(target) {
-        if (target) {
-          this.unlisten(target, 'mouseenter', 'show');
-          this.unlisten(target, 'focus', 'show');
-          this.unlisten(target, 'mouseleave', 'hide');
-          this.unlisten(target, 'blur', 'hide');
-          this.unlisten(target, 'tap', 'hide');
-        }
-        this.unlisten(this, 'mouseenter', 'hide');
-      },
-
-      /** @param {boolean} manualMode */
-      _manualModeChanged: function(manualMode) {
-        if (manualMode)
-          this._addListeners(this._target);
-        else
           this._removeListeners(this._target);
       },
 
@@ -398,12 +355,56 @@ Custom property | Description | Default
 
       },
 
+      /** @param {?Element} target */
+      _addListeners: function(target) {
+        console.trace();
+        if (target) {
+          this.listen(target, 'mouseenter', 'show');
+          this.listen(target, 'focus', 'show');
+          this.listen(target, 'mouseleave', 'hide');
+          this.listen(target, 'blur', 'hide');
+          this.listen(target, 'tap', 'hide');
+        }
+        this.listen(this, 'mouseenter', 'hide');
+      },
+
+      /** @param {boolean} manualMode */
+      _manualModeChanged: function(manualMode) {
+        if (manualMode)
+          this._removeListeners(this._target);
+        else
+          this._addListeners(this._target);
+      },
+
+      /** @param {?Element} target */
+      _removeListeners: function(target) {
+        if (target) {
+          this.unlisten(target, 'mouseenter', 'show');
+          this.unlisten(target, 'focus', 'show');
+          this.unlisten(target, 'mouseleave', 'hide');
+          this.unlisten(target, 'blur', 'hide');
+          this.unlisten(target, 'tap', 'hide');
+        }
+        this.unlisten(this, 'mouseenter', 'hide');
+      },
+
       _onAnimationFinish: function() {
         this._animationPlaying = false;
         if (!this._showing) {
           this.toggleClass('hidden', true, this.$.tooltip);
         }
       },
+
+      /**
+       * @param {?EventTarget} newTarget
+       * @param {?EventTarget} oldTarget
+       */
+      _targetChanged: function(newTarget, oldTarget) {
+        if (!this.manualMode) {
+          this._removeListeners(oldTarget);
+          this._addListeners(newTarget);
+        }
+      }
     });
   </script>
 </dom-module>
