@@ -100,6 +100,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </template>
   </test-fixture>
+  
+  <test-fixture id="manual-mode">
+    <template>
+      <div id="target"></div>
+      <paper-tooltip for="target" manual-mode></paper-tooltip>
+    </template>
+  </test-fixture>
 
   <script>
     function isHidden(element) {
@@ -365,6 +372,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(tooltip.show.callCount).to.be.equal(2);
           done();
         }, 200);
+      });
+      
+      test('tooltip ignores events in manual-mode', function() {
+        var f = fixture('manual-mode');
+        
+        var tooltip = f.querySelector('paper-tooltip');
+        assert.isTrue(tooltip.manualMode);
+        
+        tooltip.show();
+        assert.isTrue(tooltip._showing);
+        
+        sinon.spy(tooltip, 'hide');
+        
+        tooltip.fire('mouseenter');
+        
+        var target = f.querySelector('#target');
+        target.fire('mouseenter');
+        target.fire('focus');
+        target.fire('mouseleave');
+        target.fire('blur');
+        target.fire('tap');
+        
+        expect(tooltip.show.callCount).to.be.equal(0);
       });
     });
 
