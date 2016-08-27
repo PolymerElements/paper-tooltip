@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin: 0;
     padding: 0;
   }
-  #target {
+  #target, #target1, #target2 {
     width: 100px;
     height: 20px;
     background-color: red;
@@ -109,6 +109,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </template>
   </test-fixture>
+
+  <test-fixture id="class">
+    <template>
+      <div>
+        <div class="target" id="target1"></div>
+        <div class="target" id="target2"></div>
+        <paper-tooltip for="target" animation-delay="0">Tooltip text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
 
   <script>
     function isHidden(element) {
@@ -429,6 +440,122 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(divRect.height).to.be.equal(20);
 
         var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the target div is 20, and the
+        // tooltip is 14px below.
+        expect(contentRect.left).to.be.equal((100 - 70)/2);
+        expect(contentRect.top).to.be.equal(20 + 14);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal((divRect.width - contentRect.width)/2);
+        expect(contentRect.top).to.be.equal(divRect.height + tooltip.offset);
+      });
+    });
+
+    suite("tooltip is applied to a class", function() {
+      test('tooltip is shown when a target is focused', function() {
+        var f = fixture('class');
+        var target1 = f.querySelector('#target1');
+        var target2 = f.querySelector('#target2');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target1);
+        assert.isFalse(isHidden(actualTooltip));
+        MockInteractions.blur(target1);
+
+        MockInteractions.focus(target2);
+        assert.isFalse(isHidden(actualTooltip));
+        MockInteractions.blur(target2);
+      });
+
+      test('tooltip is hidden after a target is blurred', function(done) {
+        var f = fixture('class');
+        var target = f.querySelector('#target1');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+        // Simulate but don't actually run the entry animation.
+        tooltip.toggleClass('hidden', false, actualTooltip);
+        tooltip._showing = true;
+        assert.isFalse(isHidden(actualTooltip));
+
+        tooltip.addEventListener('neon-animation-finish', function() {
+          assert.isTrue(isHidden(actualTooltip));
+          done();
+        });
+        MockInteractions.blur(target1);
+      });
+
+      test('tooltip unlistens to targets on detach', function(done) {
+        var f = fixture('class');
+        var target1 = f.querySelector('#target1');
+        var target2 = f.querySelector('#target2');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        sinon.spy(tooltip, 'show');
+
+        MockInteractions.focus(target1);
+        expect(tooltip.show.callCount).to.be.equal(1);
+
+        MockInteractions.focus(target2);
+        expect(tooltip.show.callCount).to.be.equal(2);
+
+        f.removeChild(tooltip);
+
+        setTimeout(function() {
+          // No more listener means no more calling show.
+          MockInteractions.focus(target1);
+          MockInteractions.focus(target2);
+          expect(tooltip.show.callCount).to.be.equal(2);
+          done();
+        }, 200);
+      });
+
+      test('tooltip is positioned correctly', function() {
+        var f = fixture('class');
+        var target1 = f.querySelector('#target1');
+        var target2 = f.querySelector('#target2');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var actualTooltip = Polymer.dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target1);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target1.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(70);
+        expect(contentRect.height).to.be.equal(30);
+
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the target div is 20, and the
+        // tooltip is 14px below.
+        expect(contentRect.left).to.be.equal((100 - 70)/2);
+        expect(contentRect.top).to.be.equal(20 + 14);
+
+        // Also check the math, just in case.
+        expect(contentRect.left).to.be.equal((divRect.width - contentRect.width)/2);
+        expect(contentRect.top).to.be.equal(divRect.height + tooltip.offset);
+
+        MockInteractions.blur(target1);
+
+        // Test the second target
+        divRect = target2.getBoundingClientRect();
+        expect(divRect.width).to.be.equal(100);
+        expect(divRect.height).to.be.equal(20);
+
+        contentRect = tooltip.getBoundingClientRect();
         expect(contentRect.width).to.be.equal(70);
         expect(contentRect.height).to.be.equal(30);
 

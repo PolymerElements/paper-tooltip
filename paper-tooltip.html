@@ -220,10 +220,16 @@ Custom property | Description | Default
 
         var target;
         if (this.for) {
-          target = Polymer.dom(ownerRoot).querySelector('#' + this.for);
+          if (Polymer.dom(ownerRoot).querySelector('#' + this.for)) {
+            target = [Polymer.dom(ownerRoot).querySelector('#' + this.for)];
+          } else if (Polymer.dom(ownerRoot).querySelectorAll('.' + this.for) && Polymer.dom(ownerRoot).querySelectorAll('.' + this.for).length > 0){
+            target = Polymer.dom(ownerRoot).querySelectorAll('.' + this.for);
+          } else {
+            target = undefined;
+          }
         } else {
-          target = parentNode.nodeType == Node.DOCUMENT_FRAGMENT_NODE ?
-              ownerRoot.host : parentNode;
+          target = [parentNode.nodeType == Node.DOCUMENT_FRAGMENT_NODE ?
+              ownerRoot.host : parentNode];
         }
 
         return target;
@@ -235,26 +241,36 @@ Custom property | Description | Default
         if (this.manualMode)
           return;
 
-        this.listen(this._target, 'mouseenter', 'show');
-        this.listen(this._target, 'focus', 'show');
-        this.listen(this._target, 'mouseleave', 'hide');
-        this.listen(this._target, 'blur', 'hide');
-        this.listen(this._target, 'tap', 'hide');
+        this._target.forEach(function(target) {
+          this.listen(target, 'mouseenter', 'show');
+          this.listen(target, 'focus', 'show');
+          this.listen(target, 'mouseleave', 'hide');
+          this.listen(target, 'blur', 'hide');
+          this.listen(target, 'tap', 'hide');
+        }.bind(this));
+
         this.listen(this, 'mouseenter', 'hide');
       },
 
       detached: function() {
         if (this._target && !this.manualMode) {
-          this.unlisten(this._target, 'mouseenter', 'show');
-          this.unlisten(this._target, 'focus', 'show');
-          this.unlisten(this._target, 'mouseleave', 'hide');
-          this.unlisten(this._target, 'blur', 'hide');
-          this.unlisten(this._target, 'tap', 'hide');
+          this._target.forEach(function(target) {
+            this.unlisten(target, 'mouseenter', 'show');
+            this.unlisten(target, 'focus', 'show');
+            this.unlisten(target, 'mouseleave', 'hide');
+            this.unlisten(target, 'blur', 'hide');
+            this.unlisten(target, 'tap', 'hide');
+          }.bind(this));
+
           this.unlisten(this, 'mouseenter', 'hide');
         }
       },
 
-      show: function() {
+      show: function(e) {
+        // if no target event is passed use the first element from the _target property as fallback
+        this._target = this.target;
+        var triggerTarget = e && e.target ? e.target : this._target[0];
+
         // If the tooltip is already showing, there's nothing to do.
         if (this._showing)
           return;
@@ -266,7 +282,7 @@ Custom property | Description | Default
         this.cancelAnimation();
         this._showing = true;
         this.toggleClass('hidden', false, this.$.tooltip);
-        this.updatePosition();
+        this.updatePosition(triggerTarget);
 
         this.animationConfig.entry[0].timing = this.animationConfig.entry[0].timing || {};
         this.animationConfig.entry[0].timing.delay = this.animationDelay;
@@ -298,8 +314,12 @@ Custom property | Description | Default
         this._target = this.target;
       },
 
-      updatePosition: function() {
-        if (!this._target || !this.offsetParent)
+      updatePosition: function(targetElement) {
+        // if no target is passed use the first element from the _target property as fallback
+        this._target = this.target;
+        var target = targetElement || this._target[0];
+
+        if (!target || !this.offsetParent)
           return;
 
         var offset = this.offset;
@@ -308,7 +328,7 @@ Custom property | Description | Default
           offset = this.marginTop;
 
         var parentRect = this.offsetParent.getBoundingClientRect();
-        var targetRect = this._target.getBoundingClientRect();
+        var targetRect = target.getBoundingClientRect();
         var thisRect = this.getBoundingClientRect();
 
         var horizontalCenterOffset = (targetRect.width - thisRect.width) / 2;
