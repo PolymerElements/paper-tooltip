@@ -285,10 +285,6 @@ Custom property | Description | Default
         this.playAnimation('exit');
       },
 
-      _forChanged: function() {
-        this._target = this.target;
-      },
-
       updatePosition: function() {
         if (!this._target || !this.offsetParent)
           return;
@@ -366,6 +362,10 @@ Custom property | Description | Default
         }
         this.listen(this, 'mouseenter', 'hide');
       },
+      
+      _forChanged: function() {
+        this._target = this.target;
+      },
 
       /** @param {boolean} manualMode */
       _manualModeChanged: function(manualMode) {
@@ -373,6 +373,13 @@ Custom property | Description | Default
           this._removeListeners(this._target);
         else
           this._addListeners(this._target);
+      },
+      
+      _onAnimationFinish: function() {
+        this._animationPlaying = false;
+        if (!this._showing) {
+          this.toggleClass('hidden', true, this.$.tooltip);
+        }
       },
 
       /** @param {?Element} target */
@@ -385,13 +392,6 @@ Custom property | Description | Default
           this.unlisten(target, 'tap', 'hide');
         }
         this.unlisten(this, 'mouseenter', 'hide');
-      },
-
-      _onAnimationFinish: function() {
-        this._animationPlaying = false;
-        if (!this._showing) {
-          this.toggleClass('hidden', true, this.$.tooltip);
-        }
       },
 
       /**
