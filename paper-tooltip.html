@@ -119,7 +119,7 @@ Custom property | Description | Default
          */
         for: {
           type: String,
-          observer: '_forChanged'
+          observer: '_findTarget'
         },
 
         /**
@@ -236,7 +236,7 @@ Custom property | Description | Default
 
       detached: function() {
         if (!this.manualMode)
-          this._removeListeners(this._target);
+          this._removeListeners();
       },
 
       show: function() {
@@ -345,41 +345,34 @@ Custom property | Description | Default
 
       },
 
-      /** @param {?Element} target */
-      _addListeners: function(target) {
-        if (target) {
-          this.listen(target, 'mouseenter', 'show');
-          this.listen(target, 'focus', 'show');
-          this.listen(target, 'mouseleave', 'hide');
-          this.listen(target, 'blur', 'hide');
-          this.listen(target, 'tap', 'hide');
+      _addListeners: function() {
+        if (this._target) {
+          this.listen(this._target, 'mouseenter', 'show');
+          this.listen(this._target, 'focus', 'show');
+          this.listen(this._target, 'mouseleave', 'hide');
+          this.listen(this._target, 'blur', 'hide');
+          this.listen(this._target, 'tap', 'hide');
         }
         this.listen(this, 'mouseenter', 'hide');
       },
 
       _findTarget: function() {
-        var oldTarget = this._target;
+        if (!this.manualMode)
+          this._removeListeners();
 
         this._target = this.target;
 
-        if (!this.manualMode) {
-          this._removeListeners(oldTarget);
-          this._addListeners(this._target);
-        }
+        if (!this.manualMode)
+          this._addListeners();
       },
 
-      _forChanged: function() {
-        this._findTarget();
-      },
-
-      /** @param {boolean} manualMode */
-      _manualModeChanged: function(manualMode) {
-        if (manualMode)
-          this._removeListeners(this._target);
+      _manualModeChanged: function() {
+        if (this.manualMode)
+          this._removeListeners();
         else
-          this._addListeners(this._target);
+          this._addListeners();
       },
-      
+
       _onAnimationFinish: function() {
         this._animationPlaying = false;
         if (!this._showing) {
@@ -387,14 +380,13 @@ Custom property | Description | Default
         }
       },
 
-      /** @param {?Element} target */
-      _removeListeners: function(target) {
-        if (target) {
-          this.unlisten(target, 'mouseenter', 'show');
-          this.unlisten(target, 'focus', 'show');
-          this.unlisten(target, 'mouseleave', 'hide');
-          this.unlisten(target, 'blur', 'hide');
-          this.unlisten(target, 'tap', 'hide');
+      _removeListeners: function() {
+        if (this._target) {
+          this.unlisten(this._target, 'mouseenter', 'show');
+          this.unlisten(this._target, 'focus', 'show');
+          this.unlisten(this._target, 'mouseleave', 'hide');
+          this.unlisten(this._target, 'blur', 'hide');
+          this.unlisten(this._target, 'tap', 'hide');
         }
         this.unlisten(this, 'mouseenter', 'hide');
       }
