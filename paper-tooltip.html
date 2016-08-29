@@ -202,12 +202,6 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
-        },
-
-        /** @type {?EventTarget} */
-        _target: {
-          type: Object,
-          observer: '_targetChanged'
         }
       },
 
@@ -237,7 +231,7 @@ Custom property | Description | Default
       },
 
       attached: function() {
-        this._target = this.target;
+        this._findTarget();
       },
 
       detached: function() {
@@ -362,9 +356,20 @@ Custom property | Description | Default
         }
         this.listen(this, 'mouseenter', 'hide');
       },
-      
-      _forChanged: function() {
+
+      _findTarget: function() {
+        var oldTarget = this._target;
+
         this._target = this.target;
+
+        if (!this.manualMode) {
+          this._removeListeners(oldTarget);
+          this._addListeners(this._target);
+        }
+      },
+
+      _forChanged: function() {
+        this._findTarget();
       },
 
       /** @param {boolean} manualMode */
@@ -392,17 +397,6 @@ Custom property | Description | Default
           this.unlisten(target, 'tap', 'hide');
         }
         this.unlisten(this, 'mouseenter', 'hide');
-      },
-
-      /**
-       * @param {?EventTarget} newTarget
-       * @param {?EventTarget} oldTarget
-       */
-      _targetChanged: function(newTarget, oldTarget) {
-        if (!this.manualMode) {
-          this._removeListeners(oldTarget);
-          this._addListeners(newTarget);
-        }
       }
     });
   </script>
