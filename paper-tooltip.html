@@ -244,8 +244,18 @@ Custom property | Description | Default
         if (this._showing)
           return;
 
-        if (Polymer.dom(this).textContent.trim() === '')
-          return;
+        if (Polymer.dom(this).textContent.trim() === ''){
+          // Check if effective children are also empty
+          var empty = true;
+          var effectiveChildren = Polymer.dom(this).getEffectiveChildNodes();
+          for(var i=0; i<effectiveChildren.length; i++){
+            if(effectiveChildren[i].textContent.trim() !== ''){
+              empty = false;
+              break;
+            }
+          }
+          if(empty) return;
+        }
 
 
         this.cancelAnimation();
