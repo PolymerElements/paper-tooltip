@@ -20,7 +20,7 @@
   "homepage": "https://github.com/PolymerElements/paper-tooltip",
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0-preview",
+    "polymer": "Polymer/polymer#^2.0.0-rc.1",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
     "neon-animation": "PolymerElements/neon-animation#2.0-preview",
     "web-animations-js": "web-animations/web-animations-js#^2.2.0"
