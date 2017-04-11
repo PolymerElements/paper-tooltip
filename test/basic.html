@@ -490,13 +490,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       var ignoredRules = ['roleTooltipRequiresDescribedby'];
 
-      // TODO(notwaldorf): Disabling, since a11ySuite doesn't work with v1 at the moment
-      // See: https://github.com/GoogleChrome/accessibility-developer-tools/issues/312
-      // a11ySuite('basic', ignoredRules);
-      // a11ySuite('fitted', ignoredRules);
-      // a11ySuite('no-text', ignoredRules);
-      // a11ySuite('dynamic', ignoredRules);
-      // a11ySuite('custom', ignoredRules);
+      a11ySuite('basic', ignoredRules);
+      a11ySuite('fitted', ignoredRules);
+      a11ySuite('no-text', ignoredRules);
+      a11ySuite('dynamic', ignoredRules);
+      a11ySuite('custom', ignoredRules);
     });
   </script>
 </body>
