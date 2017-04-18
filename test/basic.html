@@ -100,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </template>
   </test-fixture>
-  
+
   <test-fixture id="manual-mode">
     <template>
       <div>
@@ -375,27 +375,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           done();
         }, 200);
       });
-      
+
       test('tooltip ignores events in manual-mode', function() {
         var f = fixture('manual-mode');
-        
+
         var tooltip = f.querySelector('paper-tooltip');
         assert.isTrue(tooltip.manualMode);
-        
+
         tooltip.show();
         assert.isTrue(tooltip._showing);
-        
+
         sinon.spy(tooltip, 'hide');
-        
+
         tooltip.fire('mouseenter');
-        
+
         var target = f.querySelector('#target');
         target.dispatchEvent(new CustomEvent('mouseenter'));
         target.dispatchEvent(new CustomEvent('focus'));
         target.dispatchEvent(new CustomEvent('mouseleave'));
         target.dispatchEvent(new CustomEvent('blur'));
         target.dispatchEvent(new CustomEvent('tap'));
-        
+
         expect(tooltip.hide.callCount).to.be.equal(0);
       });
 
@@ -490,11 +490,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       var ignoredRules = ['roleTooltipRequiresDescribedby'];
 
-      a11ySuite('basic', ignoredRules);
-      a11ySuite('fitted', ignoredRules);
-      a11ySuite('no-text', ignoredRules);
-      a11ySuite('dynamic', ignoredRules);
-      a11ySuite('custom', ignoredRules);
+      // TODO(notwaldorf): Disabling, since a11ySuite doesn't work with v1 at the moment
+      // See: https://github.com/GoogleChrome/accessibility-developer-tools/issues/312
+      // a11ySuite('basic', ignoredRules);
+      // a11ySuite('fitted', ignoredRules);
+      // a11ySuite('no-text', ignoredRules);
+      // a11ySuite('dynamic', ignoredRules);
+      // a11ySuite('custom', ignoredRules);
     });
   </script>
 </body>

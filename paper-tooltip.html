@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../neon-animation/web-animations.html">
 
 <!--
 Material design: [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
@@ -74,7 +75,7 @@ Custom property | Description | Default
       #tooltip {
         display: block;
         outline: none;
-        @apply(--paper-font-common-base);
+        @apply --paper-font-common-base;
         font-size: 10px;
         line-height: 1;
 
@@ -85,7 +86,7 @@ Custom property | Description | Default
         padding: 8px;
         border-radius: 2px;
 
-        @apply(--paper-tooltip);
+        @apply --paper-tooltip;
       }
 
       /* Thanks IE 10. */
@@ -95,7 +96,7 @@ Custom property | Description | Default
     </style>
 
     <div id="tooltip" class="hidden">
-      <content></content>
+      <slot></slot>
     </div>
   </template>
 
