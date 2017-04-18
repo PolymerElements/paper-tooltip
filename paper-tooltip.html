@@ -246,15 +246,17 @@ Custom property | Description | Default
 
         if (Polymer.dom(this).textContent.trim() === ''){
           // Check if effective children are also empty
-          var empty = true;
+          var allChildrenEmpty = true;
           var effectiveChildren = Polymer.dom(this).getEffectiveChildNodes();
-          for(var i=0; i<effectiveChildren.length; i++){
-            if(effectiveChildren[i].textContent.trim() !== ''){
-              empty = false;
+          for (var i = 0; i < effectiveChildren.length; i++) {
+            if (effectiveChildren[i].textContent.trim() !== '') {
+              allChildrenEmpty = false;
               break;
             }
           }
-          if(empty) return;
+          if (allChildrenEmpty) {
+            return;
+          }
         }
 
 
