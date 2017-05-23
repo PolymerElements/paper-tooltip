@@ -11,7 +11,6 @@
     "tooltip"
   ],
   "main": "paper-tooltip.html",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/PolymerElements/paper-tooltip.git"
