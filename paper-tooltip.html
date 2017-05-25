@@ -10,9 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 
 <!--
 Material design: [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
@@ -25,7 +22,7 @@ you must explicitely include the `web-animations` polyfill if you want this
 element to work on browsers not implementing the WebAnimations spec.
 
 Example:
-    // polyfill 
+    // polyfill
     <link rel="import" href="../../neon-animation/web-animations.html">
 
     <div style="display:inline-block">
@@ -111,10 +108,6 @@ Custom property | Description | Default
         role: 'tooltip',
         tabindex: -1
       },
-
-      behaviors: [
-        Polymer.NeonAnimationRunnerBehavior
-      ],
 
       properties: {
         /**
@@ -206,6 +199,14 @@ Custom property | Description | Default
         _showing: {
           type: Boolean,
           value: false
+        },
+
+        __currentAnimation: {
+          type: Object
+        },
+
+        __boundOnFinish: {
+          type: Function
         }
       },
 
@@ -232,6 +233,12 @@ Custom property | Description | Default
         }
 
         return target;
+      },
+
+      ready: function() {
+        this.__boundOnFinish = function() {
+          this.fire('neon-animation-finish');
+        }.bind(this);
       },
 
       attached: function() {
@@ -263,16 +270,23 @@ Custom property | Description | Default
           }
         }
 
-
         this.cancelAnimation();
         this._showing = true;
         this.toggleClass('hidden', false, this.$.tooltip);
         this.updatePosition();
-
-        this.animationConfig.entry[0].timing = this.animationConfig.entry[0].timing || {};
-        this.animationConfig.entry[0].timing.delay = this.animationDelay;
         this._animationPlaying = true;
-        this.playAnimation('entry');
+        var timing = this.animationConfig.entry[0].timing || {};
+
+        if (!timing.duration && timing.duration != 0) {
+          // default duration for neon-animation defaults to 0 otherwise
+          timing.duration = 500;
+        }
+
+        this.__currentAnimation = this.animate([
+          { opacity: 0 },
+          { opacity: 1 }
+        ], timing);
+        this.__currentAnimation.onfinish = this.__boundOnFinish;
       },
 
       hide: function() {
@@ -292,7 +306,18 @@ Custom property | Description | Default
 
         this._showing = false;
         this._animationPlaying = true;
-        this.playAnimation('exit');
+        var timing = this.animationConfig.exit[0].timing || {};
+
+        if (!timing.duration && timing.duration != 0) {
+          // default duration for neon-animation defaults to 0 otherwise
+          timing.duration = 500;
+        }
+        this.__currentAnimation = this.animate([
+          { opacity: 1 },
+          { opacity: 0 }
+        ], timing);
+
+        this.__currentAnimation.onfinish = this.__boundOnFinish;
       },
 
       updatePosition: function() {
@@ -359,6 +384,12 @@ Custom property | Description | Default
           this.style.top = tooltipTop + 'px';
         }
 
+      },
+
+      cancelAnimation: function() {
+        if (this._animation) {
+          this._animation.cancel();
+        }
       },
 
       _addListeners: function() {
