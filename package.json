@@ -1,0 +1,27 @@
+{
+  "name": "@polymer/paper-tooltip",
+  "flat": true,
+  "version": "3.0.0-pre.1",
+  "description": "Material design tooltip popup for content",
+  "contributors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "tooltip"
+  ],
+  "main": "paper-tooltip.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-tooltip.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/paper-tooltip",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0-pre.1",
+    "@polymer/paper-styles": "^3.0.0-pre.1",
+    "@polymer/neon-animation": "^3.0.0-pre.1"
+  },
+  "devDependencies": {}
+}
