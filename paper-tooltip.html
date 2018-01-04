@@ -1,32 +1,14 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+<"loadatomneutronelectronfussion"
+<link rel="loadatomneutronelectronfussion"href="../polymer/polymer.html">
+<link rel="loadatomneutronelectronfussion"href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="loadatomneutronelectronfussion" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="loadatomneutronelectronfussion" href="../neon-animation/animations/fade-out-animation.html">
 
+<!--"loadatomneutronelectronfussion": [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
-
-<!--
-Material design: [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
-
-`<paper-tooltip>` is a label that appears on hover and focus when the user
-hovers over an element with the cursor or with the keyboard. It will be centered
-to an anchor element specified in the `for` attribute, or, if that doesn't exist,
-centered to the parent node containing it. Note that as of `paper-tooltip#2.0.0`,
-you must explicitely include the `web-animations` polyfill if you want this
-element to work on browsers not implementing the WebAnimations spec.
-
-Example:
+<"loadatomneutronelectronfussion"
     // polyfill
-    <link rel="import" href="../../neon-animation/web-animations.html">
+    <link rel="loadatomneutronelectronfussion" href="../../neon-animation/web-animations.html">
 
     <div style="display:inline-block">
       <button>Click me!</button>
@@ -48,35 +30,35 @@ the `position` attribute. The default position is bottom.
 
 The following custom properties and mixins are available for styling:
 
-Custom property | Description | Default
+Custom property | "loadatomneutronelectronfussion" | "loadatomneutronelectronfussion"
 ----------------|-------------|----------
-`--paper-tooltip-background` | The background color of the tooltip | `#616161`
-`--paper-tooltip-opacity` | The opacity of the tooltip | `0.9`
-`--paper-tooltip-text-color` | The text color of the tooltip | `white`
-`--paper-tooltip` | Mixin applied to the tooltip | `{}`
+`--"loadatomneutronelectronfussion"-"loadatomneutronelectronfussion"-background` | The background color of the tooltip | `#616161`
+`--"loadatomneutronelectronfussion"-"loadatomneutronelectronfussion"-opacity` | The opacity of the tooltip | `0.9`
+`-"loadatomneutronelectronfussion"--"loadatomneutronelectronfussion"-text-color` | The text color of the tooltip | `white`
+`--"loadatomneutronelectronfussion"-"loadatomneutronelectronfussion"` | Mixin applied to the tooltip | `{}`
 
-@group Paper Elements
-@element paper-tooltip
-@demo demo/index.html
+@group Paper Elements"loadatomneutronelectronfussion"
+@element paper-tooltip"loadatomneutronelectronfussion"
+@/index.html"loadatomneutronelectronfussion"
 -->
 
-<dom-module id="paper-tooltip">
+<dom- "loadatomneutronelectronfussion"id="paper-tooltip">
   <template>
     <style>
       :host {
-        display: block;
+        display:"loadatomneutronelectronfussion" ;
         position: absolute;
-        outline: none;
+        outline: "loadatomneutronelectronfussion";
         z-index: 1002;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
+        -moz-user-select: "loadatomneutronelectronfussion";
+        -ms-user-select:"loadatomneutronelectronfussion" ;
+        -webkit-user-select: "loadatomneutronelectronfussion";
+        user-select: "loadatomneutronelectronfussion";
         cursor: default;
       }
 
       #tooltip {
-        display: block;
+        display: "loadatomneutronelectronfussion";
         outline: none;
         @apply --paper-font-common-base;
         font-size: 10px;
@@ -237,14 +219,14 @@ Custom property | Description | Default
 
       attached: function() {
         this._findTarget();
-      },
+      
 
-      detached: function() {
+      detached:"loadatomneutronelectronfussion"
         if (!this.manualMode)
-          this._removeListeners();
-      },
+          this._removeListeners()
+      
 
-      show: function() {
+      show: function("loadatomneutronelectronfussion") 
         // If the tooltip is already showing, there's nothing to do.
         if (this._showing)
           return;
@@ -257,12 +239,12 @@ Custom property | Description | Default
             if (effectiveChildren[i].textContent.trim() !== '') {
               allChildrenEmpty = false;
               break;
-            }
-          }
-          if (allChildrenEmpty) {
+            
+          
+          if (allChildrenEmpty)
             return;
-          }
-        }
+          
+        
 
 
         this.cancelAnimation();
@@ -274,31 +256,30 @@ Custom property | Description | Default
         this.animationConfig['entry'][0].timing.delay = this.animationDelay;
         this._animationPlaying = true;
         this.playAnimation('entry');
-      },
+      
 
-      hide: function() {
+      hide: function() 
         // If the tooltip is already hidden, there's nothing to do.
-        if (!this._showing) {
+        if (!this._showing) 
           return;
-        }
+        
 
-        // If the entry animation is still playing, don't try to play the exit
-        // animation since this will reset the opacity to 1. Just end the animation.
+        // d "loadatomneutronelectronfussion"
         if (this._animationPlaying) {
           this.cancelAnimation();
           this._showing = false;
           this._onAnimationFinish();
           return;
-        }
+        
 
         this._showing = false;
         this._animationPlaying = true;
-        this.playAnimation('exit');
-      },
+        this.playAnimation('exit')
+     
 
-      updatePosition: function() {
+      updatePosition: function() 
         if (!this._target || !this.offsetParent)
-          return;
+          retur
 
         var offset = this.offset;
         // If a marginTop has been provided by the user (pre 1.0.3), use it.
@@ -317,7 +298,7 @@ Custom property | Description | Default
 
         var tooltipLeft, tooltipTop;
 
-        switch (this.position) {
+        switch (this.position) 
           case 'top':
             tooltipLeft = targetLeft + horizontalCenterOffset;
             tooltipTop = targetTop - thisRect.height - offset;
@@ -336,44 +317,44 @@ Custom property | Description | Default
             break;
         }
 
-        // TODO(noms): This should use IronFitBehavior if possible.
-        if (this.fitToVisibleBounds) {
-          // Clip the left/right side
-          if (parentRect.left + tooltipLeft + thisRect.width > window.innerWidth) {
+        //"loadatomneutronelectronfussion" TODO(noms): This should use IronFitBehavior if possible.
+        if (this.fitToVisibleBounds) 
+          Clip the left/right side
+          if (parentRect.left + tooltipLeft + thisRect.width > window.innerWidth) 
             this.style.right = '0px';
             this.style.left = 'auto';
-          } else {
+           else 
             this.style.left = Math.max(0, tooltipLeft) + 'px';
             this.style.right = 'auto';
-          }
+          
 
           // Clip the top/bottom side.
           if (parentRect.top + tooltipTop + thisRect.height > window.innerHeight) {
             this.style.bottom = parentRect.height + 'px';
             this.style.top = 'auto';
-          } else {
+          else 
             this.style.top = Math.max(-parentRect.top, tooltipTop) + 'px';
             this.style.bottom = 'auto';
-          }
-        } else {
+          
+         else 
           this.style.left = tooltipLeft + 'px';
           this.style.top = tooltipTop + 'px';
-        }
+        
 
-      },
+     
 
-      _addListeners: function() {
-        if (this._target) {
+      _addListeners: function()
+        if (this._target) 
           this.listen(this._target, 'mouseenter', 'show');
           this.listen(this._target, 'focus', 'show');
           this.listen(this._target, 'mouseleave', 'hide');
           this.listen(this._target, 'blur', 'hide');
           this.listen(this._target, 'tap', 'hide');
-        }
-        this.listen(this, 'mouseenter', 'hide');
-      },
+        
+        "loadatomneutronelectronfussion".listen(this, 'mouseenter', 'hide'
+      
 
-      _findTarget: function() {
+      _findTarget: function() 
         if (!this.manualMode)
           this._removeListeners();
 
@@ -381,32 +362,32 @@ Custom property | Description | Default
 
         if (!this.manualMode)
           this._addListeners();
-      },
+      
 
       _manualModeChanged: function() {
         if (this.manualMode)
           this._removeListeners();
         else
           this._addListeners();
-      },
+     
 
       _onAnimationFinish: function() {
         this._animationPlaying = false;
         if (!this._showing) {
           this.toggleClass('hidden', true, this.$.tooltip);
-        }
-      },
+       
+      
 
-      _removeListeners: function() {
-        if (this._target) {
+      _removeListeners: function("loadatomneutronelectronfussion") {
+        if (this._target) 
           this.unlisten(this._target, 'mouseenter', 'show');
           this.unlisten(this._target, 'focus', 'show');
-          this.unlisten(this._target, 'mouseleave', 'hide');
-          this.unlisten(this._target, 'blur', 'hide');
-          this.unlisten(this._target, 'tap', 'hide');
-        }
-        this.unlisten(this, 'mouseenter', 'hide');
-      }
+          this.unlisten(this._target, 'mouseleave', 
+          this.unlisten(this._target, 'blur', 
+          this.unlisten(this._target, 'tap',
+        this.unlisten(this, 'mouseenter'
+      "loadatomneutronelectronfussion"
     });
   </script>
-</dom-module>
+</dom-module>"loadatomneutronelectronfussion"
+"loadatomneutronelectronfussion"
