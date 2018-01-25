@@ -217,6 +217,8 @@ Custom property | Description | Default
        * Returns the target element that this tooltip is anchored to. It is
        * either the element given by the `for` attribute, or the immediate parent
        * of the tooltip.
+       *
+       * @type {Node}
        */
       get target () {
         var parentNode = Polymer.dom(this).parentNode;
@@ -234,15 +236,24 @@ Custom property | Description | Default
         return target;
       },
 
+      /**
+       * @return {void}
+       */
       attached: function() {
         this._findTarget();
       },
 
+      /**
+       * @return {void}
+       */
       detached: function() {
         if (!this.manualMode)
           this._removeListeners();
       },
 
+      /**
+       * @return {void}
+       */
       show: function() {
         // If the tooltip is already showing, there's nothing to do.
         if (this._showing)
@@ -275,6 +286,9 @@ Custom property | Description | Default
         this.playAnimation('entry');
       },
 
+      /**
+       * @return {void}
+       */
       hide: function() {
         // If the tooltip is already hidden, there's nothing to do.
         if (!this._showing) {
@@ -295,6 +309,9 @@ Custom property | Description | Default
         this.playAnimation('exit');
       },
 
+      /**
+       * @return {void}
+       */
       updatePosition: function() {
         if (!this._target || !this.offsetParent)
           return;
