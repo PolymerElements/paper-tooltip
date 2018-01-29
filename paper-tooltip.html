@@ -25,7 +25,7 @@ you must explicitely include the `web-animations` polyfill if you want this
 element to work on browsers not implementing the WebAnimations spec.
 
 Example:
-    // polyfill 
+    // polyfill
     <link rel="import" href="../../neon-animation/web-animations.html">
 
     <div style="display:inline-block">
@@ -119,7 +119,8 @@ Custom property | Description | Default
       properties: {
         /**
          * The id of the element that the tooltip is anchored to. This element
-         * must be a sibling of the tooltip.
+         * must be a sibling of the tooltip. If this property is not set,
+         * then the tooltip will be centered to the parent node containing it.
          */
         for: {
           type: String,
