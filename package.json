@@ -1,0 +1,10 @@
+{
+  "name": "@polymer/paper-tooltip",
+  "private": true,
+  "description": "Material design tooltip popup for content",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-tooltip.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt"
+}
