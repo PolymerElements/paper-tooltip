@@ -216,7 +216,7 @@ Custom property | Description | Default
       }
 
       .cancel-animation {
-        animation-delay: -30s;
+        animation-delay: -30s !important;
       }
 
       /* Thanks IE 10. */
@@ -371,7 +371,7 @@ Custom property | Description | Default
           target = Polymer.dom(ownerRoot).querySelector('#' + this.for);
         } else {
           target = parentNode.nodeType == Node.DOCUMENT_FRAGMENT_NODE ?
-            ownerRoot.host : parentNode;
+              ownerRoot.host : parentNode;
         }
         return target;
       },
@@ -379,14 +379,14 @@ Custom property | Description | Default
       /**
        * @return {void}
        */
-      attached: function() {
+      attached: function () {
         this._findTarget();
       },
 
       /**
        * @return {void}
        */
-      detached: function() {
+      detached: function () {
         if (!this.manualMode)
           this._removeListeners();
       },
@@ -411,7 +411,7 @@ Custom property | Description | Default
         // Short-cut and cancel all animations and hide
         this.$.tooltip.classList.add('cancel-animation');
       },
-      
+
       /**
        * Shows the tooltip programatically
        * @return {void}
@@ -473,7 +473,7 @@ Custom property | Description | Default
       /**
        * @return {void}
        */
-      updatePosition: function() {
+      updatePosition: function () {
         if (!this._target || !this.offsetParent)
           return;
         var offset = this.offset;
