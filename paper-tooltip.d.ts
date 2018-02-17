@@ -62,7 +62,6 @@ interface PaperTooltipElement extends Polymer.Element, Polymer.NeonAnimationRunn
    * that your animationConfig has the exact format below.
    */
   animationConfig: object|null|undefined;
-  hostAttributes: object|null;
 
   /**
    * The id of the element that the tooltip is anchored to. This element
@@ -106,23 +105,24 @@ interface PaperTooltipElement extends Polymer.Element, Polymer.NeonAnimationRunn
    */
   animationDelay: number|null|undefined;
   _showing: boolean|null|undefined;
+  hostAttributes: object|null;
 
   /**
    * Returns the target element that this tooltip is anchored to. It is
    * either the element given by the `for` attribute, or the immediate parent
    * of the tooltip.
    */
-  target: Node|null;
+  readonly target: any;
   attached(): void;
   detached(): void;
   show(): void;
   hide(): void;
   updatePosition(): void;
-  _addListeners(): any;
-  _findTarget(): any;
-  _manualModeChanged(): any;
-  _onAnimationFinish(): any;
-  _removeListeners(): any;
+  _addListeners(): void;
+  _findTarget(): void;
+  _manualModeChanged(): void;
+  _onAnimationFinish(): void;
+  _removeListeners(): void;
 }
 
 interface HTMLElementTagNameMap {
