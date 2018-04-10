@@ -108,9 +108,9 @@ interface PaperTooltipElement extends Polymer.Element {
   animationExit: string|null|undefined;
 
   /**
-   * This property is deprecated.  Use --paper-tooltip-animation to change the animation.
-   * The entry and exit animations that will be played when showing and
-   * hiding the tooltip. If you want to override this, you must ensure
+   * This property is deprecated.  Use --paper-tooltip-animation to change the
+   * animation. The entry and exit animations that will be played when showing
+   * and hiding the tooltip. If you want to override this, you must ensure
    * that your animationConfig has the exact format below.
    */
   animationConfig: object|null|undefined;
