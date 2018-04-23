@@ -476,7 +476,7 @@ Custom property | Description | Default
           }
           // Clip the top/bottom side.
           if (parentRect.top + tooltipTop + thisRect.height > window.innerHeight) {
-            this.style.bottom = parentRect.height + 'px';
+            this.style.bottom = (parentRect.height - targetTop + offset)+ 'px';
             this.style.top = 'auto';
           } else {
             this.style.top = Math.max(-parentRect.top, tooltipTop) + 'px';
