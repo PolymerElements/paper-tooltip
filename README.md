@@ -1,67 +1,86 @@
-
-<!---
-
-This README is automatically generated from the comments in these files:
-paper-tooltip.html
-
-Edit those files, and our readme bot will duplicate them over here!
-Edit this file, and the bot will squash your changes :)
-
-The bot does some handling of markdown. Please file a bug if it does the wrong
-thing! https://github.com/PolymerLabs/tedium/issues
-
--->
-
+[![Published on NPM](https://img.shields.io/npm/v/@polymer/paper-tooltip.svg)](https://www.npmjs.com/package/@polymer/paper-tooltip)
 [![Build status](https://travis-ci.org/PolymerElements/paper-tooltip.svg?branch=master)](https://travis-ci.org/PolymerElements/paper-tooltip)
-
-_[Demo and API docs](https://elements.polymer-project.org/elements/paper-tooltip)_
-
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://webcomponents.org/element/@polymer/paper-tooltip)
 
 ## &lt;paper-tooltip&gt;
-
-Material design: [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
-
 `<paper-tooltip>` is a label that appears on hover and focus when the user
 hovers over an element with the cursor or with the keyboard. It will be centered
 to an anchor element specified in the `for` attribute, or, if that doesn't exist,
 centered to the parent node containing it.
 
-Example:
+See: [Documentation](https://www.webcomponents.org/element/@polymer/paper-tooltip),
+  [Demo](https://www.webcomponents.org/element/@polymer/paper-tooltip/demo/demo/index.html).
 
-```html
-<div style="display:inline-block">
-  <button>Click me!</button>
-  <paper-tooltip>Tooltip text</paper-tooltip>
-</div>
+## Usage
 
-<div>
-  <button id="btn">Click me!</button>
-  <paper-tooltip for="btn">Tooltip text</paper-tooltip>
-</div>
+### Installation
+```
+npm install --save @polymer/paper-tooltip
 ```
 
-The tooltip can be positioned on the top|bottom|left|right of the anchor using
-the `position` attribute. The default position is bottom.
-
+### In an html file
 ```html
-<paper-tooltip for="btn" position="left">Tooltip text</paper-tooltip>
-<paper-tooltip for="btn" position="top">Tooltip text</paper-tooltip>
+<html>
+  <head>
+    <script type="module">
+      import '@polymer/paper-tooltip/paper-tooltip.js';
+    </script>
+  </head>
+  <body>
+    <div style="display:inline-block">
+      <button>Click me!</button>
+      <paper-tooltip>Tooltip text</paper-tooltip>
+    </div>
+
+    <div>
+      <button id="btn">Click me!</button>
+      <paper-tooltip for="btn">Tooltip text</paper-tooltip>
+    </div>
+  </body>
+</html>
+```
+### In a Polymer 3 element
+```js
+import {PolymerElement, html} from '@polymer/polymer';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+
+class SampleElement extends PolymerElement {
+  static get template() {
+    return html`
+      <div style="display:inline-block">
+        <button>Click me!</button>
+        <paper-tooltip>Tooltip text</paper-tooltip>
+      </div>
+
+      <div>
+        <button id="btn">Click me!</button>
+        <paper-tooltip for="btn">Tooltip text</paper-tooltip>
+      </div>
+    `;
+  }
+}
+customElements.define('sample-element', SampleElement);
 ```
 
-### Styling
+## Contributing
+If you want to send a PR to this element, here are
+the instructions for running the tests and demo locally:
 
-The following custom properties and mixins are available for styling:
+### Installation
+```sh
+git clone https://github.com/PolymerElements/paper-tooltip
+cd paper-tooltip
+npm install
+npm install -g polymer-cli
+```
 
-| Custom property | Description | Default |
-| --- | --- | --- |
-| `--paper-tooltip-background` | The background color of the tooltip | `#616161` |
-| `--paper-tooltip-opacity` | The opacity of the tooltip | `0.9` |
-| `--paper-tooltip-text-color` | The text color of the tooltip | `white` |
-| `--paper-tooltip` | Mixin applied to the tooltip | `{}` |
-| `--paper-tooltip-delay-in` | Delay before tooltip starts to fade in | `500` |
-| `--paper-tooltip-delay-out` | Delay before tooltip starts to fade out | `0` |
-| `--paper-tooltip-duration-in` | Timing for Animation when showing tooltip | `500` |
-| `--paper-tooltip-duration-out` | Timining for Animation when hiding tooltip | `0` |
-| `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}` |
+### Running the demo locally
+```sh
+polymer serve --npm
+open http://127.0.0.1:<port>/demo/
+```
 
-
+### Running the tests
+```sh
+polymer test --npm
+```
