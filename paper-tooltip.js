@@ -45,9 +45,8 @@ Custom property | Description | Default
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
 `--paper-tooltip-delay-in` | Delay before tooltip starts to fade in | `500`
 `--paper-tooltip-delay-out` | Delay before tooltip starts to fade out | `0`
-`--paper-tooltip-duration-in` | Duration of animation when showing tooltip |
-`500`
-`--paper-tooltip-duration-out` | Duration of animation when hiding tooltip | `0`
+`--paper-tooltip-duration-in` | Animation duration when showing tooltip | `500`
+`--paper-tooltip-duration-out` | Animation duration when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
 @group Paper Elements
 @element paper-tooltip
