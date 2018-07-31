@@ -1,23 +1,27 @@
 /**
 @license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
+import '@polymer/polymer/polymer-legacy.js';
+
+import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
 /**
-Material design: [Tooltips](https://www.google.com/design/spec/components/tooltips.html)
+Material design:
+[Tooltips](https://www.google.com/design/spec/components/tooltips.html)
 `<paper-tooltip>` is a label that appears on hover and focus when the user
 hovers over an element with the cursor or with the keyboard. It will be centered
-to an anchor element specified in the `for` attribute, or, if that doesn't exist,
-centered to the parent node containing it. Note that as of `paper-tooltip#2.0.0`,
-you must explicitely include the `web-animations` polyfill if you want this
-element to work on browsers not implementing the WebAnimations spec.
+to an anchor element specified in the `for` attribute, or, if that doesn't
+exist, centered to the parent node containing it.
 Example:
-    // polyfill
-    <link rel="import" href="../../neon-animation/web-animations.html">
     <div style="display:inline-block">
       <button>Click me!</button>
       <paper-tooltip>Tooltip text</paper-tooltip>
@@ -30,6 +34,7 @@ The tooltip can be positioned on the top|bottom|left|right of the anchor using
 the `position` attribute. The default position is bottom.
     <paper-tooltip for="btn" position="left">Tooltip text</paper-tooltip>
     <paper-tooltip for="btn" position="top">Tooltip text</paper-tooltip>
+
 ### Styling
 The following custom properties and mixins are available for styling:
 Custom property | Description | Default
@@ -40,23 +45,13 @@ Custom property | Description | Default
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
 `--paper-tooltip-delay-in` | Delay before tooltip starts to fade in | `500`
 `--paper-tooltip-delay-out` | Delay before tooltip starts to fade out | `0`
-`--paper-tooltip-duration-in` | Duration of animation when showing tooltip | `500`
-`--paper-tooltip-duration-out` | Duration of animation when hiding tooltip | `0`
+`--paper-tooltip-duration-in` | Animation duration when showing tooltip | `500`
+`--paper-tooltip-duration-out` | Animation duration when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
 @group Paper Elements
 @element paper-tooltip
 @demo demo/index.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import '@polymer/polymer/polymer-legacy.js';
-
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
 Polymer({
   _template: html`
     <style>
