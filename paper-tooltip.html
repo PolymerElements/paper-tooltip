@@ -45,8 +45,8 @@ Custom property | Description | Default
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
 `--paper-tooltip-delay-in` | Delay before tooltip starts to fade in | `500`
 `--paper-tooltip-delay-out` | Delay before tooltip starts to fade out | `0`
-`--paper-tooltip-duration-in` | Duration of animation when showing tooltip | `500`
-`--paper-tooltip-duration-out` | Duration of animation when hiding tooltip | `0`
+`--paper-tooltip-duration-in` | Timing for Animation when showing tooltip | `500`
+`--paper-tooltip-duration-out` | Timining for Animation when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
 @group Paper Elements
 @element paper-tooltip
@@ -476,7 +476,7 @@ Custom property | Description | Default
           }
           // Clip the top/bottom side.
           if (parentRect.top + tooltipTop + thisRect.height > window.innerHeight) {
-            this.style.bottom = parentRect.height + 'px';
+            this.style.bottom = (parentRect.height - targetTop + offset) + 'px';
             this.style.top = 'auto';
           } else {
             this.style.top = Math.max(-parentRect.top, tooltipTop) + 'px';
@@ -575,7 +575,7 @@ Custom property | Description | Default
         }
         this.unlisten(this.$.tooltip, 'animationend', '_onAnimationEnd');
         this.unlisten(this, 'mouseenter', 'hide');
-      }
+      },
     });
   </script>
 </dom-module>
