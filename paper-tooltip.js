@@ -45,8 +45,8 @@ Custom property | Description | Default
 `--paper-tooltip` | Mixin applied to the tooltip | `{}`
 `--paper-tooltip-delay-in` | Delay before tooltip starts to fade in | `500`
 `--paper-tooltip-delay-out` | Delay before tooltip starts to fade out | `0`
-`--paper-tooltip-duration-in` | Animation duration when showing tooltip | `500`
-`--paper-tooltip-duration-out` | Animation duration when hiding tooltip | `0`
+`--paper-tooltip-duration-in` | Timing for animation when showing tooltip | `500`
+`--paper-tooltip-duration-out` | Timing for animation when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
 @group Paper Elements
 @element paper-tooltip
@@ -476,7 +476,7 @@ Polymer({
       }
       // Clip the top/bottom side.
       if (parentRect.top + tooltipTop + thisRect.height > window.innerHeight) {
-        this.style.bottom = parentRect.height + 'px';
+        this.style.bottom = (parentRect.height - targetTop + offset) + 'px';
         this.style.top = 'auto';
       } else {
         this.style.top = Math.max(-parentRect.top, tooltipTop) + 'px';
