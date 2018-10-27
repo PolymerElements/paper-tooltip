@@ -339,6 +339,7 @@ Polymer({
    */
   attached: function() {
     this._findTarget();
+    this.listen(this.$.tooltip, 'animationend', '_onAnimationEnd');
   },
 
   /**
@@ -347,6 +348,7 @@ Polymer({
   detached: function() {
     if (!this.manualMode)
       this._removeListeners();
+    this.unlisten(this.$.tooltip, 'animationend', '_onAnimationEnd');
   },
 
   /**
@@ -496,7 +498,6 @@ Polymer({
       this.listen(this._target, 'blur', 'hide');
       this.listen(this._target, 'tap', 'hide');
     }
-    this.listen(this.$.tooltip, 'animationend', '_onAnimationEnd');
     this.listen(this, 'mouseenter', 'hide');
   },
 
@@ -582,7 +583,6 @@ Polymer({
       this.unlisten(this._target, 'blur', 'hide');
       this.unlisten(this._target, 'tap', 'hide');
     }
-    this.unlisten(this.$.tooltip, 'animationend', '_onAnimationEnd');
     this.unlisten(this, 'mouseenter', 'hide');
   }
 });
