@@ -476,24 +476,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(tooltip._addListeners.callCount).to.be.equal(1);
         expect(tooltip._removeListeners.callCount).to.be.equal(1);
       });
-      
+
       test('animation state is updated in manual-mode', function() {
         var f = fixture('manual-mode');
 
         var tooltip = f.querySelector('paper-tooltip');
         assert.isTrue(tooltip.manualMode);
         sinon.spy(tooltip, '_onAnimationEnd');
-        
+
         // Manually set the animation state for testing purposes
         tooltip._animationPlaying = true;
         assert.isTrue(tooltip._animationPlaying);
-        
-        // Select the inner tooltip div and use it to simulate the end of its 
+
+        // Select the inner tooltip div and use it to simulate the end of its
         // animation
         var tooltipContainer = tooltip.shadowRoot.querySelector('#tooltip');
-        
-        // Dispatch an event simulating the end of a tooltip animation and make 
-        // sure that the callback has been executed and that the animation 
+
+        // Dispatch an event simulating the end of a tooltip animation and make
+        // sure that the callback has been executed and that the animation
         // state has been updated
         tooltipContainer.dispatchEvent(new CustomEvent('animationend'));
         expect(tooltip._onAnimationEnd.callCount).to.be.equal(1);
