@@ -37,6 +37,7 @@ the `position` attribute. The default position is bottom.
 
 ### Styling
 The following custom properties and mixins are available for styling:
+
 Custom property | Description | Default
 ----------------|-------------|----------
 `--paper-tooltip-background` | The background color of the tooltip | `#616161`
@@ -48,6 +49,7 @@ Custom property | Description | Default
 `--paper-tooltip-duration-in` | Timing for animation when showing tooltip | `500`
 `--paper-tooltip-duration-out` | Timing for animation when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
+
 @group Paper Elements
 @element paper-tooltip
 @demo demo/index.html
