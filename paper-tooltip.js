@@ -49,12 +49,11 @@ Custom property | Description | Default
 `--paper-tooltip-duration-in` | Timing for animation when showing tooltip | `500`
 `--paper-tooltip-duration-out` | Timing for animation when hiding tooltip | `0`
 `--paper-tooltip-animation` | Mixin applied to the tooltip animation | `{}`
-
-@group Paper Elements
 @element paper-tooltip
 @demo demo/index.html
 */
 Polymer({
+  /** @override */
   _template: html`
     <style>
       :host {
@@ -338,6 +337,7 @@ Polymer({
 
   /**
    * @return {void}
+   * @override
    */
   attached: function() {
     this._findTarget();
@@ -345,6 +345,7 @@ Polymer({
 
   /**
    * @return {void}
+   * @override
    */
   detached: function() {
     if (!this.manualMode)
