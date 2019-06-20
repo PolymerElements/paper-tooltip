@@ -22,10 +22,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin: 0;
     padding: 0;
   }
-  #target {
+  #target, #target1 {
     width: 100px;
     height: 20px;
     background-color: red;
+  }
+  #target2 {
+    width: 120px;
+    height: 30px;
+    background-color: blue;
   }
   paper-tooltip {
     width: 70px;
@@ -114,6 +119,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div>
         <div id="target"></div>
         <paper-tooltip for="target" manual-mode>Text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="manual-target">
+    <template>
+      <div>
+        <div id="target1">
+          <div id="target2">
+          </div>
+        </div>
+        <paper-tooltip>Text</paper-tooltip>
       </div>
     </template>
   </test-fixture>
@@ -391,6 +408,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             contentRect = tooltip.getBoundingClientRect();
             expectToBasicallyEqual(contentRect.left, (100 - 70) / 2);
             expectToBasicallyEqual(contentRect.top, 20 + 14);
+          });
+
+      test(
+          'tooltip is positioned correctly after the target is manually set',
+          function() {
+            var f = fixture('manual-target');
+            var target1 = f.querySelector('#target1');
+            var target2 = f.querySelector('#target2');
+            var tooltip = f.querySelector('paper-tooltip');
+
+            var actualTooltip = dom(tooltip.root).querySelector('#tooltip');
+            assert.isTrue(isHidden(actualTooltip));
+
+            // Skip animations in this test, which means we'll show and hide the
+            // the tooltip manually, instead of calling focus and blur.
+            tooltip.target = target1;
+
+            // The tooltip needs to hide before it gets repositioned.
+            tooltip.toggleClass('hidden', true, actualTooltip);
+            tooltip.updatePosition();
+            tooltip.toggleClass('hidden', false, actualTooltip);
+            assert.isFalse(isHidden(actualTooltip));
+
+            // The target1 div width is 100, and the tooltip width is 70, and
+            // it's centered. The height of the target div is 20, and the
+            // tooltip is 14px below.
+            var contentRect = tooltip.getBoundingClientRect();
+            expectToBasicallyEqual(contentRect.left, (100 - 70) / 2);
+            expectToBasicallyEqual(contentRect.top, 20 + 14);
+
+            // Check that a target that is not a sibling can also be set
+            // manually.
+            tooltip.target = target2;
+
+            // The tooltip needs to hide before it gets repositioned.
+            tooltip.toggleClass('hidden', true, actualTooltip);
+            tooltip.updatePosition();
+            tooltip.toggleClass('hidden', false, actualTooltip);
+            assert.isFalse(isHidden(actualTooltip));
+
+            // The target2 div width is 120, and the tooltip width is 70, and
+            // it's centered. The height of the target div is 30, and the
+            // tooltip is 14px below.
+            contentRect = tooltip.getBoundingClientRect();
+            expectToBasicallyEqual(contentRect.left, (120 - 70) / 2);
+            expectToBasicallyEqual(contentRect.top, 30 + 14);
           });
 
       test('tooltip is hidden after target is blurred', function() {
