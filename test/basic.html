@@ -61,6 +61,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="basic-fitted">
+    <template>
+      <div>
+        <div id="target"></div>
+        <paper-tooltip for="target" animation-delay="0" fit-to-visible-bounds>Tooltip text</paper-tooltip>
+      </div>
+    </template>
+  </test-fixture>
+
+
   <test-fixture id="fitted">
     <template>
       <div>
@@ -350,6 +360,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Should be fitted on the left side.
         expectToBasicallyEqual(contentRect.left, 0);
+        expectToBasicallyEqual(contentRect.top, divRect.height + tooltip.offset);
+      });
+
+      test('tooltip is fitted correctly if in bounds', function() {
+        var f = fixture('basic-fitted');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var actualTooltip = dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        console.log('divrect')
+        var divRect = target.getBoundingClientRect();
+        expectToBasicallyEqual(divRect.width, 100);
+        expectToBasicallyEqual(divRect.height, 20);
+
+        console.log('contentrect')
+        var divRect = target.getBoundingClientRect();
+        var contentRect = tooltip.getBoundingClientRect();
+        expectToBasicallyEqual(contentRect.width, 70);
+        expectToBasicallyEqual(contentRect.height, 30);
+
+        console.log('positioning')
+        console.log('content left' + contentRect.left)
+        console.log('content top' + contentRect.top)
+        // The target div width is 100, and the tooltip width is 70, and
+        // it's centered. The height of the target div is 20, and the
+        // tooltip is 14px below.
+        expectToBasicallyEqual(contentRect.left, (100 - 70) / 2);
+        expectToBasicallyEqual(contentRect.top, 20 + 14);
+
+        console.log('positioning2')
+        // Also check the math, just in case.
+        expectToBasicallyEqual(
+            contentRect.left, (divRect.width - contentRect.width) / 2);
         expectToBasicallyEqual(contentRect.top, divRect.height + tooltip.offset);
       });
 

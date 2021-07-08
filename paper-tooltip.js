@@ -473,17 +473,21 @@ Polymer({
       if (parentRect.left + tooltipLeft + thisRect.width > window.innerWidth) {
         this.style.right = '0px';
         this.style.left = 'auto';
-      } else {
+      } else if (parentRect.left + tooltipLeft < 0) {
         this.style.left = Math.max(0, tooltipLeft) + 'px';
         this.style.right = 'auto';
+      } else {
+        this.style.left = tooltipLeft + 'px';
       }
       // Clip the top/bottom side.
       if (parentRect.top + tooltipTop + thisRect.height > window.innerHeight) {
         this.style.bottom = (parentRect.height - targetTop + offset) + 'px';
         this.style.top = 'auto';
-      } else {
+      } else if (parentRect.top + tooltipTop < 0) {
         this.style.top = Math.max(-parentRect.top, tooltipTop) + 'px';
         this.style.bottom = 'auto';
+      } else {
+        this.style.top = tooltipTop + 'px';
       }
     } else {
       this.style.left = tooltipLeft + 'px';
