@@ -118,6 +118,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="offset-parent-new-behavior">
+    <template>
+      <div id=container>
+        <div>
+          <div id=target style="height: 100px; width: 100px; background-color: red"></div>
+          <paper-tooltip for="target">tooltip text</paper-tooltip>
+        </div>
+      </div>
+    </template>
+  </test-fixture>
+
   <script type="module">
     import '@polymer/iron-test-helpers/mock-interactions.js';
     import '../paper-tooltip.js';
@@ -491,6 +502,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         expect(tooltip._removeListeners.callCount).to.be.equal(1);
         expect(tooltip._addListeners.callCount).to.be.equal(1);
+      });
+
+      test('offsetParent new spec behavior', function() {
+        var f = fixture('offset-parent-new-behavior');
+        var target = f.querySelector('#target');
+        var tooltip = f.querySelector('paper-tooltip');
+
+        var shadowRoot = f.attachShadow({mode: 'open'});
+        shadowRoot.innerHTML = `
+          <style>
+            .dialog {
+              display: block;
+              position: absolute;
+              left: 0px;
+              right: 0px;
+              width: 100px;
+              margin: auto;
+            }
+          </style>
+          <div class=dialog>
+            <slot></slot>
+          </div>
+        `;
+
+        var actualTooltip = dom(tooltip.root).querySelector('#tooltip');
+        assert.isTrue(isHidden(actualTooltip));
+
+        MockInteractions.focus(target);
+        assert.isFalse(isHidden(actualTooltip));
+
+        var divRect = target.getBoundingClientRect();
+        expectToBasicallyEqual(divRect.width, 100);
+        expectToBasicallyEqual(divRect.height, 100);
+
+        var contentRect = tooltip.getBoundingClientRect();
+        expectToBasicallyEqual(contentRect.width, 70);
+        expectToBasicallyEqual(contentRect.height, 30);
+
+        // Check for correct 'bottom' positioning: the horizontal center of the
+        // target and tooltip are aligned, and the top of the tooltip is
+        // `offset` pixels below the bottom of the target.
+        expectToBasicallyEqual(
+            contentRect.left + contentRect.width / 2,
+            divRect.left + divRect.width / 2);
+        expectToBasicallyEqual(contentRect.top - divRect.bottom, tooltip.offset);
       });
     });
 
