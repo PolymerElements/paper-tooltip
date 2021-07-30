@@ -598,6 +598,10 @@ Polymer({
    */
   _composedOffsetParent: function() {
     let offsetParent = this.offsetParent;
+    if (window.ShadyDOM && window.ShadyDOM.inUse) {
+      return offsetParent;
+    }
+
     let ancestor = this;
     let foundInsideSlot = false;
     while (ancestor && ancestor !== offsetParent) {

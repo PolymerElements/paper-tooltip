@@ -532,8 +532,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         MockInteractions.focus(target);
         assert.isFalse(isHidden(actualTooltip));
 
-        debugger;
-
         var divRect = target.getBoundingClientRect();
         expectToBasicallyEqual(divRect.width, 100);
         expectToBasicallyEqual(divRect.height, 100);
@@ -542,8 +540,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expectToBasicallyEqual(contentRect.width, 70);
         expectToBasicallyEqual(contentRect.height, 30);
 
-        expectToBasicallyEqual(contentRect.left, 415);
-        expectToBasicallyEqual(contentRect.top, 114);
+        // Check for correct 'bottom' positioning: the horizontal center of the
+        // target and tooltip are aligned, and the top of the tooltip is
+        // `offset` pixels below the bottom of the target.
+        expectToBasicallyEqual(
+            contentRect.left + contentRect.width / 2,
+            divRect.left + divRect.width / 2);
+        expectToBasicallyEqual(contentRect.top - divRect.bottom, tooltip.offset);
       });
     });
 
